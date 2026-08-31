@@ -1,0 +1,52 @@
+﻿@page
+@model LoginWith2faModel
+@{
+    ViewData["Title"] = "Authentification à deux facteurs";
+}
+
+<main class="min-h-screen flex items-center justify-center px-6 pt-32 pb-20 bg-background">
+    <div class="w-full max-w-md bg-surface-container-low rounded-xl shadow-xl p-10 border border-outline-variant/20">
+
+        <div class="text-center mb-8">
+            <h1 class="font-headline text-3xl text-tertiary mb-3">@ViewData["Title"]</h1>
+            <p class="text-on-surface-variant text-sm">
+                Votre connexion est protégée par une application d'authentification. Entrez votre code ci-dessous.
+            </p>
+        </div>
+
+        <form method="post" asp-route-returnUrl="@Model.ReturnUrl" class="space-y-6">
+            <input asp-for="RememberMe" type="hidden" />
+            <div asp-validation-summary="ModelOnly" class="text-red-600 text-sm" role="alert"></div>
+
+            <div>
+                <label asp-for="Input.TwoFactorCode" class="block font-label text-[10px] uppercase tracking-widest text-outline mb-2"></label>
+                <input asp-for="Input.TwoFactorCode"
+                       autocomplete="off"
+                       class="w-full rounded-lg border border-outline-variant/30 bg-surface px-4 py-3 text-tertiary focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all" />
+                <span asp-validation-for="Input.TwoFactorCode" class="block mt-2 text-sm text-red-600"></span>
+            </div>
+
+            <label class="flex items-center gap-3 text-sm text-on-surface-variant">
+                <input asp-for="Input.RememberMachine" class="rounded border-outline-variant text-primary focus:ring-primary" />
+                @Html.DisplayNameFor(m => m.Input.RememberMachine)
+            </label>
+
+            <button type="submit"
+                    class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary py-4 rounded-lg font-label uppercase tracking-[0.2em] text-sm shadow-lg shadow-primary/10 hover:shadow-primary/20 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0">
+                Se connecter
+            </button>
+        </form>
+
+        <p class="text-center mt-8 text-sm text-on-surface-variant">
+            Pas accès à votre appareil d'authentification ?
+            <a id="recovery-code-login" asp-page="./LoginWithRecoveryCode" asp-route-returnUrl="@Model.ReturnUrl" class="text-primary hover:underline">
+                Connectez-vous avec un code de récupération
+            </a>.
+        </p>
+
+    </div>
+</main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

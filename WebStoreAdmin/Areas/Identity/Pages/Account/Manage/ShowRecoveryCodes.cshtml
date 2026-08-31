@@ -1,0 +1,26 @@
+﻿@page
+@model ShowRecoveryCodesModel
+@{
+    ViewData["Title"] = "Codes de récupération";
+    ViewData["ActivePage"] = "TwoFactorAuthentication";
+}
+
+<partial name="_StatusMessage" for="StatusMessage" />
+<h2 class="font-headline text-2xl text-tertiary mb-6">@ViewData["Title"]</h2>
+
+<div class="bg-amber-50 border border-amber-200 text-amber-700 rounded-lg p-4 mb-8" role="alert">
+    <p class="font-medium mb-2">Conservez ces codes dans un endroit sûr.</p>
+    <p class="text-sm">
+        Si vous perdez votre appareil et n'avez pas les codes de récupération, vous perdrez l'accès à votre compte.
+    </p>
+</div>
+
+<div class="bg-surface-container rounded-lg p-6 max-w-lg">
+    <div class="grid grid-cols-2 gap-x-6 gap-y-2 font-mono text-sm">
+        @for (var row = 0; row < Model.RecoveryCodes.Length; row += 2)
+        {
+            <code class="recovery-code text-tertiary">@Model.RecoveryCodes[row]</code>
+            <code class="recovery-code text-tertiary">@Model.RecoveryCodes[row + 1]</code>
+        }
+    </div>
+</div>

@@ -1,0 +1,174 @@
+﻿@model WebStoreAdmin.ViewModels.Clients.ClientsDetailsVM
+
+@{
+    ViewData["Title"] = "Détails du client";
+}
+
+<div class="max-w-5xl mx-auto px-8 py-12 pt-32 pb-20">
+
+    <div class="bg-surface-container-low rounded-xl shadow-sm border border-outline-variant/20 overflow-hidden">
+
+        <!-- Header -->
+        <div class="p-8 border-b border-outline-variant/20">
+
+            <h1 class="text-3xl font-headline text-tertiary">
+                Détails du client
+            </h1>
+
+            <p class="mt-3 text-on-surface-variant">
+                Informations complètes du client et historique de commandes.
+            </p>
+
+        </div>
+
+        <!-- Informations -->
+        <div class="p-8">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                <div>
+                    <p class="text-sm uppercase tracking-widest text-on-surface-variant mb-2">
+                        Prénom
+                    </p>
+
+                    <p class="text-lg text-tertiary font-medium">
+                        @Model.Prenom
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-sm uppercase tracking-widest text-on-surface-variant mb-2">
+                        Nom
+                    </p>
+
+                    <p class="text-lg text-tertiary font-medium">
+                        @Model.Nom
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-sm uppercase tracking-widest text-on-surface-variant mb-2">
+                        Courriel
+                    </p>
+
+                    <p class="text-lg text-tertiary">
+                        @Model.Email
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-sm uppercase tracking-widest text-on-surface-variant mb-2">
+                        Nombre de commandes
+                    </p>
+
+                    <p class="text-lg text-tertiary">
+                        @Model.NombreCommandes
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Commandes -->
+        <div class="px-8 pb-8">
+
+            <h2 class="text-xl font-headline text-tertiary mb-4">
+                Historique des commandes
+            </h2>
+
+            @if (Model.Commandes != null && Model.Commandes.Any())
+            {
+                <div class="overflow-x-auto rounded-lg border border-outline-variant/20">
+
+                    <table class="w-full">
+
+                        <thead class="bg-surface-container">
+
+                            <tr>
+
+                                <th class="text-left px-6 py-4">
+                                    #
+                                </th>
+
+                                <th class="text-left px-6 py-4">
+                                    Date
+                                </th>
+
+                                <th class="text-left px-6 py-4">
+                                    Statut
+                                </th>
+
+                                <th class="text-right px-6 py-4">
+                                    Total
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var commande in Model.Commandes)
+                            {
+                                <tr class="border-t border-outline-variant/20 hover:bg-surface-container-high transition-colors">
+
+                                    <td class="px-6 py-4">
+                                        @commande.Id
+                                    </td>
+
+                                    <td class="px-6 py-4">
+                                        @commande.DateCommande.ToString("dd/MM/yyyy")
+                                    </td>
+
+                                    <td class="px-6 py-4">
+                                        @commande.Statut
+                                    </td>
+
+                                    <td class="px-6 py-4 text-right">
+                                        @commande.Total.ToString("0.00") $
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="bg-surface-container p-6 rounded-lg text-center text-on-surface-variant">
+
+                    Ce client n'a encore effectué aucune commande.
+
+                </div>
+            }
+
+        </div>
+
+        <!-- Footer -->
+        <div class="px-8 py-6 bg-surface-container flex flex-col sm:flex-row justify-end gap-4">
+
+            <a asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="px-6 py-3 rounded-lg bg-primary text-white hover:opacity-90 transition-colors">
+
+                Modifier
+
+            </a>
+
+            <a asp-action="Index"
+               class="px-6 py-3 rounded-lg border border-outline-variant hover:bg-surface-container-high transition-colors">
+
+                Retour à la liste
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

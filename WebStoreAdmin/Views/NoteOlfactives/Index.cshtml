@@ -1,0 +1,106 @@
+@model IEnumerable<WebStoreAdmin.ViewModels.NoteOlfactive.NoteOlfactiveIndexVM>
+
+@{
+    ViewData["Title"] = "Notes olfactives";
+}
+
+<div class="max-w-6xl mx-auto px-8 py-12 pt-32 pb-20">
+
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+
+        <div>
+            <h1 class="text-4xl font-headline text-tertiary">
+                Notes olfactives
+            </h1>
+
+            <p class="mt-2 text-on-surface-variant">
+                Gérez les notes utilisées dans la composition des parfums.
+            </p>
+        </div>
+
+        <a asp-action="Create"
+           class="mt-4 md:mt-0 px-6 py-3 rounded-lg bg-primary text-white hover:opacity-90 transition">
+
+            Nouvelle note
+
+        </a>
+
+    </div>
+
+    <div class="bg-surface-container-low rounded-xl shadow-sm overflow-hidden border border-outline-variant/20">
+
+        <table class="w-full">
+
+            <thead class="bg-surface-container">
+                <tr class="text-left">
+                    <th class="px-6 py-4">Image</th>
+                    <th class="px-6 py-4">Nom</th>
+                    <th class="px-6 py-4">Famille olfactive</th>
+                    <th class="px-6 py-4">Parfums associés</th>
+                    <th class="px-6 py-4 text-center">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="border-t border-outline-variant/20 hover:bg-surface-container-high transition">
+
+                        <td class="px-6 py-4">
+                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                            {
+                                <img src="@item.ImageUrl" alt="@item.Nom" class="w-12 h-12 rounded-lg object-cover" />
+                            }
+                            else
+                            {
+                                <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-xs uppercase text-on-surface-variant">
+                                    @item.Nom.Substring(0, 1)
+                                </div>
+                            }
+                        </td>
+
+                        <td class="px-6 py-4 font-medium text-tertiary">
+                            @item.Nom
+                        </td>
+
+                        <td class="px-6 py-4">
+                            @(item.FamilleOlfactiveNom ?? "—")
+                        </td>
+
+                        <td class="px-6 py-4">
+                            @item.NombreParfums
+                        </td>
+
+                        <td class="px-6 py-4">
+                            <div class="flex justify-center gap-2">
+                                <a asp-action="Edit" asp-route-id="@item.Id"
+                                   class="px-3 py-2 rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200">
+                                    Modifier
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id"
+                                   class="px-3 py-2 rounded-lg bg-red-100 text-red-700 hover:bg-red-200">
+                                    Supprimer
+                                </a>
+                            </div>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="flex items-center justify-between pt-4 mt-6 border-t border-outline-variant/20">
+        <a asp-controller="FamilleOlfactives" asp-action="Index"
+           class="font-label text-xs uppercase tracking-widest text-outline hover:text-tertiary transition-colors">
+            Voir les familles olfactives &rarr;
+        </a>
+        <a asp-controller="Home" asp-action="Index"
+           class="font-label text-xs uppercase tracking-widest text-outline hover:text-tertiary transition-colors">
+            &larr; Retour à l'accueil
+        </a>
+    </div>
+
+</div>

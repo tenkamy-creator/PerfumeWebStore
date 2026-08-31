@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../SeederAdmin/SeederAdmin.csproj" />
+  <Project Path="WebStoreAdmin.csproj" />
+</Solution>

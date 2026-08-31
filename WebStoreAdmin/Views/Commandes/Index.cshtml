@@ -1,0 +1,184 @@
+﻿@model IEnumerable<WebStoreAdmin.ViewModels.Commandes.CommandesIndexVM>
+
+@{
+    ViewData["Title"] = "Commandes";
+}
+
+<div class="max-w-7xl mx-auto px-8 py-12 pt-32">
+
+    <!-- En-tête -->
+    <div class="flex flex-col md:flex-row justify-between items-center gap-6 mb-10">
+
+        <div>
+            <h1 class="text-4xl font-headline text-tertiary font-bold">
+                Gestion des commandes
+            </h1>
+
+            <p class="mt-2 text-on-surface-variant">
+                Consultez, modifiez et gérez les commandes de la boutique.
+            </p>
+        </div>
+
+        <a asp-action="Ajouter"
+           class="px-6 py-3 rounded-lg bg-primary text-white shadow-sm hover:shadow-md hover:opacity-90 transition">
+
+            + Nouvelle commande
+
+        </a>
+
+    </div>
+
+    <!-- Tableau -->
+    <div class="bg-surface-container-low rounded-xl shadow-sm border border-outline-variant/20 overflow-hidden">
+
+        @if (!Model.Any())
+        {
+            <div class="p-12 text-center">
+
+                <div class="text-6xl mb-4">
+                    📦
+                </div>
+
+                <h3 class="text-xl font-semibold text-tertiary">
+                    Aucune commande trouvée
+                </h3>
+
+                <p class="mt-2 text-on-surface-variant">
+                    Aucune commande n'a encore été enregistrée.
+                </p>
+
+                <a asp-action="Ajouter"
+                   class="inline-block mt-6 px-6 py-3 rounded-lg bg-primary text-white">
+
+                    Créer une commande
+
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <div class="overflow-x-auto">
+
+                <table class="w-full">
+
+                    <thead class="bg-surface-container">
+
+                        <tr class="text-left text-sm uppercase tracking-wider text-on-surface-variant">
+
+                            <th class="px-6 py-4">
+                                #
+                            </th>
+
+                            <th class="px-6 py-4">
+                                Date
+                            </th>
+
+                            <th class="px-6 py-4">
+                                Client
+                            </th>
+
+                            <th class="px-6 py-4">
+                                Articles
+                            </th>
+
+                            <th class="px-6 py-4">
+                                Total
+                            </th>
+
+                            <th class="px-6 py-4 text-center">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr class="border-t border-outline-variant/20 hover:bg-surface-container-high transition cursor-pointer"
+                                onclick="window.location='@Url.Action("Details", new { id = item.Id })'">
+
+                                <td class="px-6 py-4 font-medium">
+                                    #@item.Id
+                                </td>
+
+                                <td class="px-6 py-4">
+                                    @item.DateCommande.ToString("dd/MM/yyyy")
+                                </td>
+
+                                <td class="px-6 py-4">
+                                    @item.NomClient
+                                </td>
+
+                                <td class="px-6 py-4">
+
+                                    <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-medium">
+                                        @item.NombreArticles article(s)
+                                    </span>
+
+                                </td>
+
+                                <td class="px-6 py-4">
+
+                                    <span class="font-bold text-lg text-primary">
+                                        @item.Total.ToString("0.00") $
+                                    </span>
+
+                                </td>
+
+                                <td class="px-6 py-4">
+
+                                    <div class="flex justify-center gap-2"
+                                         onclick="event.stopPropagation();">
+
+                                        <a asp-action="Details"
+                                           asp-route-id="@item.Id"
+                                           class="px-3 py-2 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 transition">
+
+                                            Détails
+
+                                        </a>
+
+                                        @* <a asp-action="Modifier"
+                                           asp-route-id="@item.Id"
+                                           class="px-3 py-2 rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 transition">
+
+                                            Modifier
+
+                                        </a>
+
+                                        <a asp-action="Supprimer"
+                                           asp-route-id="@item.Id"
+                                           class="px-3 py-2 rounded-lg bg-red-100 text-red-700 hover:bg-red-200 transition">
+
+                                            Supprimer
+
+                                        </a> *@
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+    </div>
+
+    <div class="flex items-center justify-between pt-4 border-t border-outline-variant/20">
+        <a asp-controller="Home" asp-action="Index"
+           class="font-label text-xs uppercase tracking-widest text-outline hover:text-tertiary transition-colors">
+            &larr; Retour à l'accueil
+        </a>
+    </div>
+
+</div>

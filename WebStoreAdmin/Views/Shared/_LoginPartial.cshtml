@@ -1,0 +1,38 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var utilisateur = User.FindFirstValue("Utilisateur");
+
+        var role = User.IsInRole(Roles.Administrateur) ? Roles.Administrateur
+        : User.IsInRole(Roles.Gestionnaire) ? Roles.Gestionnaire
+        : User.IsInRole(Roles.Vendeur) ? Roles.Vendeur
+        : null;
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Gérer mon profil">
+                Bonjour @User.Identity?.Name!
+                @(utilisateur != null ? $" ({utilisateur})" : "")    @(role != null ? $" [{role}]" : "")
+            </a>
+        </li>
+        <li class="nav-item">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                @Html.AntiForgeryToken()
+
+                <button type="submit" class="nav-link btn btn-link text-dark">Déconnexion</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Inscription</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Connexion</a>
+        </li>
+    }
+</ul>

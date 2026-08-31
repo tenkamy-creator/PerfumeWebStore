@@ -1,0 +1,341 @@
+﻿@using WebStoreAdmin.Extensions
+@using WebStoreAdmin.Models
+@inject WebStoreAdmin.Services.PanierService PanierService
+
+@{
+    int totalItems = User.Identity!.IsAuthenticated
+        ? await PanierService.NombreArticlesAsync(User)
+        : 0;
+
+    string currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+
+    string NavLinkClass(string controllerName)
+    {
+        bool isActive = string.Equals(currentController, controllerName, StringComparison.OrdinalIgnoreCase);
+
+        return isActive
+            ? "font-noto-serif text-sm uppercase tracking-widest text-[#6e142d] border-b border-[#6e142d] pb-1 transition-colors duration-500 ease-in-out nav-link"
+            : "font-noto-serif text-sm uppercase tracking-widest text-[#393838]/70 hover:text-[#6e142d] transition-colors duration-500 ease-in-out nav-link";
+    }
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&amp;family=Manrope:wght@300;400;500;600&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed": "#e4e2e1",
+                      "surface-container": "#f0ede9",
+                      "primary-fixed-dim": "#ffb2bd",
+                      "outline": "#887174",
+                      "on-tertiary-fixed": "#1b1c1c",
+                      "surface-container-high": "#ebe8e3",
+                      "surface-bright": "#fcf9f4",
+                      "on-secondary-container": "#785a1a",
+                      "secondary-container": "#fed488",
+                      "on-tertiary-fixed-variant": "#474746",
+                      "surface": "#fcf9f4",
+                      "inverse-on-surface": "#f3f0eb",
+                      "on-tertiary": "#ffffff",
+                      "outline-variant": "#dbc0c3",
+                      "primary-fixed": "#ffd9dd",
+                      "on-primary-container": "#ffaab7",
+                      "on-surface": "#1c1c19",
+                      "error-container": "#ffdad6",
+                      "surface-container-highest": "#e5e2dd",
+                      "on-secondary-fixed": "#261900",
+                      "on-tertiary-container": "#c3c1c1",
+                      "surface-tint": "#a13b51",
+                      "tertiary-fixed-dim": "#c8c6c5",
+                      "error": "#ba1a1a",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed-variant": "#82233b",
+                      "primary": "#6e142d",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed-dim": "#e9c176",
+                      "surface-dim": "#dcdad5",
+                      "inverse-surface": "#31302d",
+                      "tertiary": "#393838",
+                      "on-secondary-fixed-variant": "#5d4201",
+                      "on-surface-variant": "#554244",
+                      "on-primary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed": "#ffdea5",
+                      "background": "#fcf9f4",
+                      "inverse-primary": "#ffb2bd",
+                      "on-primary-fixed": "#400013",
+                      "surface-container-low": "#f6f3ee",
+                      "surface-variant": "#e5e2dd",
+                      "on-secondary": "#ffffff",
+                      "on-background": "#1c1c19",
+                      "secondary": "#775a19",
+                      "primary-container": "#8d2c43",
+                      "tertiary-container": "#504f4f"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "fontFamily": {
+                      "headline": ["Noto Serif"],
+                      "body": ["Manrope"],
+                      "label": ["Manrope"]
+              }
+            },
+          },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .glass-nav {
+            background: rgba(252, 249, 244, 0.8);
+            backdrop-filter: blur(24px);
+        }
+
+        .staggered-grid-item:nth-child(even) {
+            margin-top: 3rem;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f6f3ee;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #dbc0c3;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-on-surface antialiased custom-scrollbar mb-5">
+    <!-- TopNavBar -->
+    <nav class="fixed top-0 w-full z-50 bg-[#fcf9f4]/80 backdrop-blur-xl shadow-sm">
+        <div class="flex justify-between items-center px-12 py-6 w-full max-w-screen-2xl mx-auto">
+            <div class="text-2xl font-semibold tracking-tighter text-[#393838] font-noto-serif">L'Essence Atelier</div>
+            <!-- Desktop Menu -->
+            <div class="hidden lg:flex space-x-12">
+                <a class="@NavLinkClass("Home")"
+                   asp-area=""
+                   asp-controller="Home"
+                   asp-action="Index">
+                    Home
+                </a>
+
+                <a class="@NavLinkClass("Parfums")"
+                   asp-area=""
+                   asp-controller="Parfums"
+                   asp-action="Index">
+                    Collections
+                </a>
+
+                <a class="font-noto-serif text-sm uppercase tracking-widest text-[#393838]/70 hover:text-[#6e142d] transition-colors duration-500 ease-in-out"
+                   asp-area=""
+                   asp-controller="NoteOlfactives"
+                   asp-action="Index">
+                    Notes
+                </a>
+
+                <a class="font-noto-serif text-sm uppercase tracking-widest text-[#393838]/70 hover:text-[#6e142d] transition-colors duration-500 ease-in-out"
+                   href="#">
+                    Heritage
+                </a>
+
+                <a class="font-noto-serif text-sm uppercase tracking-widest text-[#393838]/70 hover:text-[#6e142d] transition-colors duration-500 ease-in-out"
+                   href="#">
+                    Boutiques
+                </a>
+            </div>
+            <div class="flex items-center space-x-6">
+                <!-- Mobile Menu Button -->
+                <button id="menuBtn"
+                        class="lg:hidden material-symbols-outlined text-[#393838]">
+                    menu
+                </button>
+                <a class="relative nav-link material-symbols-outlined
+          scale-100 active:scale-95 transition-transform
+          text-[#393838]"
+                   asp-area=""
+                   asp-controller="Panier"
+                   asp-action="Index">
+
+                    shopping_cart
+
+                    @if (totalItems > 0)
+                    {
+                        <span class="absolute -top-2 -right-2
+                     bg-primary text-white
+                     text-[10px] rounded-full
+                     min-w-[20px] h-5 px-1
+                     flex items-center justify-center
+                     font-bold
+                     shadow-lg shadow-primary/30">
+                            @totalItems
+                        </span>
+                    }
+
+                </a>
+                <a class="material-symbols-outlined scale-100 active:scale-95 transition-transform text-[#393838]"
+                   asp-area="Identity"
+                   asp-page="/Account/Login">
+                    person
+                </a>
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </nav>
+    <!-- Overlay -->
+    <div id="menuOverlay"
+         class="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 hidden">
+    </div>
+
+    <!-- Mobile Side Menu -->
+    <div id="mobileMenu"
+         class="fixed top-0 right-0 h-full w-72 bg-[#fcf9f4]
+            shadow-2xl z-50
+            transform translate-x-full
+            transition-transform duration-300 ease-in-out">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between px-6 py-6 border-b border-[#dbc0c3]/30">
+
+            <span class="font-noto-serif text-lg text-[#393838]">
+                Menu
+            </span>
+
+            <!-- Close Button -->
+            <button id="closeMenu"
+                    class="material-symbols-outlined text-[#393838] hover:text-[#6e142d] transition-colors">
+                close
+            </button>
+
+        </div>
+
+        <!-- Links -->
+        <div class="flex flex-col px-6 py-8 space-y-8">
+
+            <a class="@(NavLinkClass("Home").Replace("font-noto-serif text-sm", "font-noto-serif text-sm"))"
+               asp-area=""
+               asp-controller="Home"
+               asp-action="Index">
+                Home
+            </a>
+
+            <a class="@NavLinkClass("Parfums")"
+               asp-area=""
+               asp-controller="Parfums"
+               asp-action="Index">
+                Collections
+            </a>
+
+            <a class="font-noto-serif text-sm uppercase tracking-widest
+                  text-[#393838]/80 hover:text-[#6e142d] transition-colors"
+                asp-area=""
+                asp-controller="NoteOlfactives"
+                asp-action="Index"
+               >
+                Notes
+            </a>
+
+            <a class="font-noto-serif text-sm uppercase tracking-widest
+                  text-[#393838]/80 hover:text-[#6e142d] transition-colors"
+               href="#">
+                Heritage
+            </a>
+
+            <a class="font-noto-serif text-sm uppercase tracking-widest
+                  text-[#393838]/80 hover:text-[#6e142d] transition-colors"
+               href="#">
+                Boutiques
+            </a>
+
+        </div>
+
+    </div>
+    @RenderBody()
+
+    <footer class="bg-[#f6f3ee] w-full border-t border-[#dbc0c3]/15">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12 px-12 py-20 w-full max-w-screen-2xl mx-auto">
+            <div class="space-y-6">
+                <div class="text-xl font-noto-serif italic text-[#393838]">L'Essence Atelier</div>
+                <p class="font-manrope text-sm leading-relaxed tracking-wide text-[#393838]/60 max-w-xs">
+                    Curating the world's most evocative scents since 1924. Our ateliers blend traditional French techniques with modern olfactory art.
+                </p>
+            </div>
+            <div class="grid grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <span class="font-label text-[0.7rem] uppercase tracking-[0.2rem] text-on-surface-variant">Maison</span>
+                    <ul class="space-y-2">
+                        <li><a class="font-manrope text-sm text-[#393838]/60 hover:text-[#6e142d] transition-all" href="#">The Story</a></li>
+                        <li><a class="font-manrope text-sm text-[#393838]/60 hover:text-[#6e142d] transition-all" href="#">Olfactory Art</a></li>
+                        <li><a class="font-manrope text-sm text-[#393838]/60 hover:text-[#6e142d] transition-all" href="#">Sustainability</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <span class="font-label text-[0.7rem] uppercase tracking-[0.2rem] text-on-surface-variant">Concierge</span>
+                    <ul class="space-y-2">
+                        <li><a class="font-manrope text-sm text-[#393838]/60 hover:text-[#6e142d] transition-all" href="#">Shipping &amp; Returns</a></li>
+                        <li><a class="font-manrope text-sm text-[#393838]/60 hover:text-[#6e142d] transition-all" href="#">Privacy Policy</a></li>
+                        <li><a class="font-manrope text-sm text-[#393838]/60 hover:text-[#6e142d] transition-all" href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="space-y-6">
+                <span class="font-label text-[0.7rem] uppercase tracking-[0.2rem] text-on-surface-variant">Newsletter</span>
+                <p class="font-manrope text-sm text-[#393838]/60">Join the circle for exclusive previews and atelier updates.</p>
+                <div class="flex border-b border-outline-variant/30 pb-2">
+                    <input class="bg-transparent border-none focus:ring-0 text-sm flex-1 font-light italic" placeholder="Email Address" type="email" />
+                    <button class="material-symbols-outlined text-primary">arrow_right_alt</button>
+                </div>
+            </div>
+        </div>
+        <div class="px-12 py-8 border-t border-[#dbc0c3]/10 text-center">
+            <span class="font-manrope text-[0.65rem] uppercase tracking-[0.2rem] text-on-surface-variant/50">© 2024 L'Essence Atelier. Crafted for the Connoisseur.</span>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        const menuBtn = document.getElementById("menuBtn");
+        const closeMenu = document.getElementById("closeMenu");
+        const mobileMenu = document.getElementById("mobileMenu");
+        const overlay = document.getElementById("menuOverlay");
+
+        function openMenu() {
+            mobileMenu.classList.remove("translate-x-full");
+            overlay.classList.remove("hidden");
+        }
+
+        function closeMobileMenu() {
+            mobileMenu.classList.add("translate-x-full");
+            overlay.classList.add("hidden");
+        }
+
+        menuBtn.addEventListener("click", openMenu);
+
+        closeMenu.addEventListener("click", closeMobileMenu);
+
+        overlay.addEventListener("click", closeMobileMenu);
+    </script>
+</body>
+</html>

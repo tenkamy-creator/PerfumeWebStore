@@ -1,0 +1,239 @@
+﻿@model WebStoreAdmin.ViewModels.Panier.PanierVM
+
+@{
+    ViewData["Title"] = "Panier";
+}
+
+<main class="pt-32 pb-24 px-6 md:px-12 max-w-screen-xl mx-auto">
+
+    <header class="mb-16 text-center md:text-left">
+        <h1 class="text-4xl md:text-5xl font-headline font-bold text-tertiary mb-4 tracking-tight">Your Selection</h1>
+        <p class="text-on-surface-variant font-body tracking-wide">@Model.QuantiteArticles items curated for your sensory journey.</p>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+
+        <!-- Cart Items List -->
+        <div class="lg:col-span-8 space-y-12">
+
+            @if (Model.EstVide)
+            {
+                <p>Votre panier est vide.</p>
+            }
+            else
+            {
+                <div class="space-y-8">
+
+                    @foreach (var item in Model.Lignes)
+                    {
+                        <div class="bg-surface-container-low p-6 rounded-xl flex justify-between items-center gap-6">
+
+                            <div class="flex items-center gap-6 flex-1">
+
+                                <!-- IMAGE -->
+                                <div class="w-24 h-24 flex-shrink-0 bg-surface-container overflow-hidden rounded-lg">
+                                    <img src="@(item.ImageUrl ?? "https://placehold.co/150x150")"
+                                         alt="@item.Nom"
+                                         class="w-full h-full object-cover" />
+                                </div>
+
+                                <div>
+                                    <h2 class="font-headline text-2xl">
+                                        @item.Nom
+                                    </h2>
+
+                                    <p>
+                                        @item.PrixUnitaire.ToString("0.00") $
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="flex items-center gap-4">
+
+                                <form asp-action="ModifierQuantite"
+                                      method="post"
+                                      class="flex items-center gap-2">
+
+                                    <input type="hidden"
+                                           name="lignePanierId"
+                                           value="@item.Id" />
+
+                                    <input type="number"
+                                           name="quantite"
+                                           value="@item.Quantite"
+                                           min="1"
+                                           max="@item.StockDisponible"
+                                           onchange="this.form.submit()"
+                                           class="w-20 border rounded p-2" />
+
+                                    <button type="submit"
+                                            class="bg-primary text-white px-4 py-2 rounded">
+                                        Modifier
+                                    </button>
+                                </form>
+
+                                <form asp-action="Retirer" method="post">
+                                    <input type="hidden"
+                                           name="lignePanierId"
+                                           value="@item.Id" />
+
+                                    <button type="submit"
+                                            class="bg-red-500 text-white px-4 py-2 rounded">
+                                        Retirer
+                                    </button>
+                                </form>
+
+                            </div>
+
+                            <p class="text-sm text-gray-500">
+                                Total :
+                                @item.SousTotal.ToString("0.00") $
+                            </p>
+
+                        </div>
+                    }
+
+                    <div class="text-right text-3xl font-headline">
+                        Total :
+                        @Model.Subtotal.ToString("0.00") $
+                    </div>
+
+                </div>
+            }
+
+            <!-- Gift Message Section -->
+            <div class="bg-surface-container-low p-8 rounded-lg mt-12">
+                <label class="block text-sm font-label uppercase tracking-[0.15rem] text-tertiary mb-4">A Personal Touch</label>
+                <p class="text-sm text-on-surface-variant mb-6 font-body">Include a handwritten note with your order for a truly bespoke gift experience.</p>
+                <textarea class="w-full bg-surface-container-lowest border-none focus:ring-1 focus:ring-primary rounded-sm p-4 text-tertiary font-body placeholder:text-outline/50 placeholder:italic transition-all" placeholder="Write your message here..." rows="4"></textarea>
+            </div>
+
+            <!-- Recently Viewed Section -->
+            @if (Model.RecemmentConsultes.Any())
+            {
+                <div class="mt-12">
+
+                    <h2 class="text-xl font-headline text-tertiary mb-6">
+                        Récemment consultés
+                    </h2>
+
+                    <div class="flex gap-4 overflow-x-auto pb-4">
+
+                        @foreach (var parfum in Model.RecemmentConsultes)
+                        {
+                            <a asp-controller="Parfums"
+                               asp-action="Details"
+                               asp-route-id="@parfum.Id"
+                               class="flex-shrink-0 w-40 group">
+
+                                <div class="aspect-[3/4] bg-surface-container-low rounded-lg overflow-hidden mb-2">
+                                    <img src="@(parfum.ImagePrincipale?.Url ?? "https://placehold.co/200x266")"
+                                         alt="@parfum.Nom"
+                                         class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                                </div>
+
+                                <p class="text-sm font-medium text-tertiary truncate">
+                                    @parfum.Nom
+                                </p>
+
+                                <p class="text-xs text-on-surface-variant">
+                                    @parfum.Prix.ToString("0.00") $
+                                </p>
+
+                            </a>
+                        }
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+        <!-- Summary Sidebar -->
+        <aside class="lg:col-span-4 sticky top-32 space-y-8">
+
+            <div class="bg-surface-container-low p-8 rounded-lg shadow-sm">
+                <h2 class="text-2xl font-headline font-bold text-tertiary mb-8">Summary</h2>
+
+                <div class="space-y-4 font-body text-on-surface-variant">
+                    <div class="flex justify-between">
+                        <span>Subtotal</span>
+                        <span class="text-tertiary font-semibold">
+                            @Model.Subtotal.ToString("0.00") $
+                        </span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Shipping (Standard)</span>
+                        <span class="text-tertiary font-semibold">$0.00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Tax Estimate</span>
+                        <span class="text-tertiary font-semibold">
+                            @Model.Taxes.ToString("0.00") $
+                        </span>
+                    </div>
+                </div>
+
+                <div class="border-t border-outline-variant/30 my-8"></div>
+
+                <div class="flex justify-between items-end mb-10">
+                    <span class="text-lg font-headline font-medium text-tertiary">
+                        Total
+                    </span>
+                    <span class="text-3xl font-headline font-bold text-primary">
+                        @Model.Total.ToString("0.00") $
+                    </span>
+                </div>
+
+                @if (!Model.EstVide)
+                {
+                    <form asp-controller="Checkout"
+                          asp-action="CreateCheckoutSession"
+                          method="post">
+
+                        <button type="submit"
+                                class="w-full py-5 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-lg">
+                            Procéder au paiement
+                        </button>
+
+                    </form>
+                }
+                else
+                {
+                    <button disabled
+                            class="w-full py-5 bg-gray-400 text-white rounded-lg cursor-not-allowed">
+                        Panier vide
+                    </button>
+                }
+
+                <div class="mt-8 flex items-center justify-center gap-4 opacity-40">
+                    <span class="material-symbols-outlined text-sm">lock</span>
+                    <span class="text-[10px] font-label uppercase tracking-widest">Secure Encrypted Checkout</span>
+                </div>
+            </div>
+
+            <!-- Shipping Perks -->
+            <div class="border border-outline-variant/20 p-6 rounded-lg space-y-6">
+                <div class="flex items-start gap-4">
+                    <span class="material-symbols-outlined text-secondary">inventory_2</span>
+                    <div>
+                        <p class="text-xs font-label uppercase tracking-wider text-tertiary font-bold">Complimentary Samples</p>
+                        <p class="text-[11px] text-on-surface-variant mt-1 leading-relaxed">Three 2ml vials of your choice included with this order.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <span class="material-symbols-outlined text-secondary">local_shipping</span>
+                    <div>
+                        <p class="text-xs font-label uppercase tracking-wider text-tertiary font-bold">Priority Fulfillment</p>
+                        <p class="text-[11px] text-on-surface-variant mt-1 leading-relaxed">Artisanally packed and shipped within 24 hours.</p>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+    </div>
+
+</main>

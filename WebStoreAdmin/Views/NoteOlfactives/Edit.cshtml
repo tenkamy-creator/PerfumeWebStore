@@ -1,0 +1,89 @@
+@model WebStoreAdmin.ViewModels.NoteOlfactive.NoteOlfactiveModifierVM
+
+@{
+    ViewData["Title"] = "Modifier une note olfactive";
+}
+
+<div class="max-w-2xl mx-auto px-8 py-12 pt-32 pb-20">
+
+    <div class="bg-surface-container-low rounded-xl shadow-sm border border-outline-variant/20 overflow-hidden">
+
+        <div class="p-8 border-b border-outline-variant/20">
+            <h1 class="text-3xl font-headline text-tertiary">Modifier la note olfactive</h1>
+            <p class="mt-3 text-on-surface-variant">Mettez à jour les informations de cette note.</p>
+        </div>
+
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+            <div class="p-8 space-y-6">
+
+                <div asp-validation-summary="ModelOnly" class="bg-red-100 text-red-700 p-4 rounded-lg"></div>
+
+                <input type="hidden" asp-for="Id" />
+
+                <div>
+                    <label asp-for="Nom" class="block text-sm uppercase tracking-widest text-on-surface-variant mb-2"></label>
+                    <input asp-for="Nom"
+                           class="w-full rounded-lg border border-outline-variant bg-surface px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all" />
+                    <span asp-validation-for="Nom" class="text-red-600 text-sm mt-2 block"></span>
+                </div>
+
+                <div>
+                    <label asp-for="FamilleOlfactiveId" class="block text-sm uppercase tracking-widest text-on-surface-variant mb-2"></label>
+                    <select asp-for="FamilleOlfactiveId"
+                            asp-items="Model.Familles"
+                            class="w-full rounded-lg border border-outline-variant bg-surface px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                        <option value="">Aucune famille</option>
+                    </select>
+                    <span asp-validation-for="FamilleOlfactiveId" class="text-red-600 text-sm mt-2 block"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Image" class="block text-sm uppercase tracking-widest text-on-surface-variant mb-2"></label>
+
+                    <div class="flex items-center gap-4 mb-3">
+                        @if (!string.IsNullOrEmpty(Model.ImageUrlActuelle))
+                        {
+                            <img src="@Model.ImageUrlActuelle" alt="@Model.Nom" class="w-16 h-16 rounded-lg object-cover border border-outline-variant/30" />
+                        }
+                        else
+                        {
+                            <div class="w-16 h-16 rounded-lg bg-surface-container flex items-center justify-center text-xs uppercase text-on-surface-variant">
+                                Aucune
+                            </div>
+                        }
+                        <span class="text-sm text-on-surface-variant">
+                            @(string.IsNullOrEmpty(Model.ImageUrlActuelle) ? "Aucune image actuellement" : "Image actuelle — sélectionnez un fichier pour la remplacer")
+                        </span>
+                    </div>
+
+                    <input asp-for="Image"
+                           type="file"
+                           accept="image/png, image/jpeg, image/webp"
+                           class="w-full rounded-lg border border-outline-variant bg-surface px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all" />
+                    <p class="text-xs text-outline mt-2">Optionnel — laissez vide pour conserver l'image actuelle.</p>
+                    <span asp-validation-for="Image" class="text-red-600 text-sm mt-2 block"></span>
+                </div>
+
+            </div>
+
+            <div class="px-8 py-6 bg-surface-container flex flex-col sm:flex-row justify-end gap-4">
+                <a asp-action="Index" class="px-6 py-3 rounded-lg border border-outline-variant hover:bg-surface-container-high transition-colors">
+                    Annuler
+                </a>
+                <button type="submit" class="px-6 py-3 rounded-lg bg-primary text-white hover:opacity-90 transition-colors shadow-sm">
+                    Enregistrer les modifications
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

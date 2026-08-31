@@ -1,0 +1,46 @@
+﻿@page
+@model LogoutModel
+@{
+    ViewData["Title"] = "Déconnexion";
+}
+
+<main class="min-h-screen flex items-center justify-center px-6 pt-32 pb-20 bg-background">
+
+    <div class="w-full max-w-md bg-surface-container-low rounded-xl shadow-xl p-10 border border-outline-variant/20 text-center">
+
+        <h1 class="font-headline text-4xl text-tertiary mb-6">@ViewData["Title"]</h1>
+
+        @{
+            if (User.Identity?.IsAuthenticated ?? false)
+            {
+                <p class="text-on-surface-variant mb-8">
+                    Vous êtes sur le point de quitter votre session.
+                </p>
+
+                <form asp-area="Identity"
+                      asp-page="/Account/Logout"
+                      asp-route-returnUrl="@Url.Page("/", new { area = "" })"
+                      method="post">
+                    <button type="submit"
+                            class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary py-4 rounded-lg font-label uppercase tracking-[0.2em] text-sm shadow-lg shadow-primary/10 hover:shadow-primary/20 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0">
+                        Se déconnecter
+                    </button>
+                </form>
+            }
+            else
+            {
+                <div class="flex flex-col items-center gap-4">
+                    <span class="material-symbols-outlined text-primary text-5xl">check_circle</span>
+                    <p class="text-on-surface-variant">
+                        Vous avez été déconnecté avec succès de l'application.
+                    </p>
+                    <a asp-controller="Home" asp-action="Index" class="text-primary hover:underline text-sm">
+                        Retour à l'accueil
+                    </a>
+                </div>
+            }
+        }
+
+    </div>
+
+</main>

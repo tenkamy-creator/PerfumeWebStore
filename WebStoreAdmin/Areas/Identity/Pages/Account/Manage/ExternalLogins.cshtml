@@ -1,0 +1,45 @@
+﻿@page
+@model ExternalLoginModel
+@{
+    ViewData["Title"] = "Associer votre compte";
+}
+
+<main class="min-h-screen flex items-center justify-center px-6 pt-32 pb-20 bg-background">
+    <div class="w-full max-w-md bg-surface-container-low rounded-xl shadow-xl p-10 border border-outline-variant/20">
+
+        <div class="text-center mb-8">
+            <h1 class="font-headline text-3xl text-tertiary mb-2">@ViewData["Title"]</h1>
+            <h2 id="external-login-title" class="text-on-surface-variant text-sm">
+                Associez votre compte <strong>@Model.ProviderDisplayName</strong>.
+            </h2>
+        </div>
+
+        <p id="external-login-description" class="bg-blue-50 border border-blue-200 text-blue-700 rounded-lg p-4 text-sm mb-8">
+            Vous vous êtes authentifié avec succès via <strong>@Model.ProviderDisplayName</strong>.
+            Entrez une adresse courriel ci-dessous et cliquez sur "S'inscrire" pour terminer la connexion.
+        </p>
+
+        <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="space-y-6">
+            <div asp-validation-summary="ModelOnly" class="text-red-600 text-sm" role="alert"></div>
+
+            <div>
+                <label asp-for="Input.Email" class="block font-label text-[10px] uppercase tracking-widest text-outline mb-2"></label>
+                <input asp-for="Input.Email"
+                       autocomplete="email"
+                       placeholder="nom@exemple.com"
+                       class="w-full rounded-lg border border-outline-variant/30 bg-surface px-4 py-3 text-tertiary placeholder:text-outline/50 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all" />
+                <span asp-validation-for="Input.Email" class="block mt-2 text-sm text-red-600"></span>
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary py-4 rounded-lg font-label uppercase tracking-[0.2em] text-sm shadow-lg shadow-primary/10 hover:shadow-primary/20 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0">
+                S'inscrire
+            </button>
+        </form>
+
+    </div>
+</main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

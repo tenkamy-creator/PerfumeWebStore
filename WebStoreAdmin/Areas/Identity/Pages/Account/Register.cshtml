@@ -1,0 +1,262 @@
+﻿@page
+@using WebStoreAdmin.Areas.Identity
+@using WebStoreAdmin.Areas.Identity.Pages
+@using WebStoreAdmin.Areas.Identity.Pages.Account
+@using WebStoreAdmin.Models
+@using WebStoreAdmin.ViewModels
+@model RegisterModel
+
+@{
+    ViewData["Title"] = "Inscription";
+}
+
+<main class="pt-36 pb-24 px-6">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+
+        <!-- Left Side -->
+        <div class="space-y-8">
+            <div>
+                <p class="font-label text-xs uppercase tracking-[0.25em] text-secondary mb-4">
+                    Rejoignez la Maison
+                </p>
+
+                <h1 class="font-headline text-5xl text-tertiary leading-tight">
+                    Créez votre compte
+                </h1>
+
+                <p class="mt-6 text-on-surface-variant leading-8 max-w-lg">
+                    Découvrez des créations olfactives exclusives, sauvegardez vos favoris
+                    et profitez d'une expérience personnalisée chez L'Essence Atelier.
+                </p>
+            </div>
+
+            <div class="bg-surface-container-low rounded-xl p-8 border border-outline-variant/20">
+                <h3 class="font-headline text-xl text-tertiary mb-4">
+                    Avantages Membres
+                </h3>
+
+                <ul class="space-y-4 text-sm text-on-surface-variant">
+                    <li class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">
+                            check_circle
+                        </span>
+                        Accès aux collections privées
+                    </li>
+
+                    <li class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">
+                            check_circle
+                        </span>
+                        Historique de commandes
+                    </li>
+
+                    <li class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">
+                            check_circle
+                        </span>
+                        Recommandations personnalisées
+                    </li>
+
+                    <li class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">
+                            check_circle
+                        </span>
+                        Offres et avant-premières exclusives
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Register Form -->
+        <div class="bg-surface-container-low rounded-2xl p-10 border border-outline-variant/20 shadow-sm">
+
+            <form id="registerForm"
+                  asp-route-returnUrl="@Model.ReturnUrl"
+                  method="post"
+                  class="space-y-6">
+
+                <div>
+                    <h2 class="font-headline text-3xl text-tertiary mb-2">
+                        Inscription
+                    </h2>
+
+                    <p class="text-sm text-on-surface-variant">
+                        Créer un nouveau compte utilisateur.
+                    </p>
+                </div>
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-red-600 text-sm"
+                     role="alert">
+                </div>
+
+                <!-- Surnom -->
+                <div class="space-y-2">
+                    <label asp-for="Input.Surnom"
+                           class="text-sm uppercase tracking-wider text-on-surface-variant">
+                        Surnom
+                    </label>
+
+                    <input asp-for="Input.Surnom"
+                           class="w-full rounded-lg border border-outline-variant/30 bg-surface px-4 py-4 focus:border-primary focus:ring-primary"
+                           placeholder="Votre surnom" />
+
+                    <span asp-validation-for="Input.Surnom"
+                          class="text-red-600 text-sm">
+                    </span>
+                </div>
+
+                <!-- Nom -->
+                <div class="space-y-2">
+                    <label asp-for="Input.Nom"
+                           class="text-sm uppercase tracking-wider text-on-surface-variant">
+                        Nom
+                    </label>
+
+                    <input asp-for="Input.Nom"
+                           class="w-full rounded-lg border border-outline-variant/30 bg-surface px-4 py-4 focus:border-primary focus:ring-primary"
+                           placeholder="Votre nom" />
+
+                    <span asp-validation-for="Input.Nom"
+                          class="text-red-600 text-sm">
+                    </span>
+                </div>
+
+                <!-- Email -->
+                <div class="space-y-2">
+                    <label asp-for="Input.Email"
+                           class="text-sm uppercase tracking-wider text-on-surface-variant">
+                        Email
+                    </label>
+
+                    <input asp-for="Input.Email"
+                           autocomplete="email"
+                           class="w-full rounded-lg border border-outline-variant/30 bg-surface px-4 py-4 focus:border-primary focus:ring-primary"
+                           placeholder="nom@example.com" />
+
+                    <span asp-validation-for="Input.Email"
+                          class="text-red-600 text-sm">
+                    </span>
+                </div>
+
+                @* <!-- Adresse -->
+                <div class="space-y-2">
+                    <label asp-for="Input.Adresse"
+                           class="text-sm uppercase tracking-wider text-on-surface-variant">
+                        Nom
+                    </label>
+
+                    <input asp-for="Input.Adresse"
+                           class="w-full rounded-lg border border-outline-variant/30 bg-surface px-4 py-4 focus:border-primary focus:ring-primary"
+                           placeholder="Votre adresse" />
+
+                    <span asp-validation-for="Input.Adresse"
+                          class="text-red-600 text-sm">
+                    </span>
+                </div> *@
+
+                <!-- Password -->
+                <div class="space-y-2">
+                    <label asp-for="Input.Password"
+                           class="text-sm uppercase tracking-wider text-on-surface-variant">
+                        Mot de passe
+                    </label>
+
+                    <input asp-for="Input.Password"
+                           autocomplete="new-password"
+                           class="w-full rounded-lg border border-outline-variant/30 bg-surface px-4 py-4 focus:border-primary focus:ring-primary"
+                           placeholder="••••••••" />
+
+                    <span asp-validation-for="Input.Password"
+                          class="text-red-600 text-sm">
+                    </span>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="space-y-2">
+                    <label asp-for="Input.ConfirmPassword"
+                           class="text-sm uppercase tracking-wider text-on-surface-variant">
+                        Confirmation
+                    </label>
+
+                    <input asp-for="Input.ConfirmPassword"
+                           autocomplete="new-password"
+                           class="w-full rounded-lg border border-outline-variant/30 bg-surface px-4 py-4 focus:border-primary focus:ring-primary"
+                           placeholder="••••••••" />
+
+                    <span asp-validation-for="Input.ConfirmPassword"
+                          class="text-red-600 text-sm">
+                    </span>
+                </div>
+
+                <!-- Submit -->
+                <button id="registerSubmit"
+                        type="submit"
+                        class="w-full bg-gradient-to-br from-primary to-primary-container
+                               text-on-primary py-5 rounded-xl uppercase tracking-[0.2em]
+                               text-sm transition-all duration-300
+                               hover:shadow-xl hover:-translate-y-1">
+                    Créer mon compte
+                </button>
+
+                <!-- Login Link -->
+                <div class="text-center pt-2">
+                    <a asp-area="Identity"
+                       asp-page="/Account/Login"
+                       class="text-sm text-primary hover:underline">
+                        Vous avez déjà un compte ? Se connecter
+                    </a>
+                </div>
+            </form>
+
+            <!-- External Login -->
+            <div class="mt-12">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="flex-1 h-px bg-outline-variant/30"></div>
+
+                    <span class="text-xs uppercase tracking-[0.2em] text-outline">
+                        Ou continuer avec
+                    </span>
+
+                    <div class="flex-1 h-px bg-outline-variant/30"></div>
+                </div>
+
+                @{
+                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                    {
+                        <div class="bg-surface rounded-xl p-6 text-sm text-on-surface-variant border border-outline-variant/20">
+                            Aucun service externe n'est actuellement configuré.
+                        </div>
+                    }
+                    else
+                    {
+                        <form id="external-account"
+                              asp-page="./ExternalLogin"
+                              asp-route-returnUrl="@Model.ReturnUrl"
+                              method="post"
+                              class="space-y-4">
+
+                            @foreach (var provider in Model.ExternalLogins!)
+                            {
+                                <button type="submit"
+                                        name="provider"
+                                        value="@provider.Name"
+                                        title="Connexion avec @provider.DisplayName"
+                                        class="w-full border border-outline-variant/30
+                                                           bg-surface hover:bg-surface-container
+                                                           transition-colors rounded-xl py-4
+                                                           text-sm uppercase tracking-wider">
+                                    @provider.DisplayName
+                                </button>
+                            }
+                        </form>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

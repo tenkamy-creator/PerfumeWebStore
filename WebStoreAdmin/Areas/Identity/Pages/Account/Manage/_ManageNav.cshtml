@@ -1,0 +1,115 @@
+﻿@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    var hasExternalLogins =
+        (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+
+    // ManageNavPages peut retourner null.
+    // On vérifie donc la valeur sans appeler Trim() directement sur null.
+    bool EstActif(string? navClass) =>
+        string.Equals(
+            navClass?.Trim(),
+            "active",
+            StringComparison.OrdinalIgnoreCase
+        );
+
+    string ClasseLien(bool actif) => actif
+        ? "bg-primary text-on-primary shadow-sm"
+        : "text-on-surface-variant hover:bg-surface-container-high hover:text-tertiary";
+}
+
+<nav class="space-y-1">
+
+    <!-- PROFIL -->
+    <a asp-page="./Index"
+       id="profile"
+       class="block px-4 py-3 rounded-lg
+        font-label text-xs uppercase tracking-widest
+        transition-colors
+        @ClasseLien(
+           EstActif(
+               ManageNavPages.IndexNavClass(ViewContext)
+           )
+       )">
+        Profil
+    </a>
+
+
+    <!-- COURRIEL -->
+    <a asp-page="./Email"
+       id="email"
+       class="block px-4 py-3 rounded-lg
+        font-label text-xs uppercase tracking-widest
+        transition-colors
+        @ClasseLien(
+           EstActif(
+               ManageNavPages.EmailNavClass(ViewContext)
+           )
+       )">
+        Courriel
+    </a>
+
+
+    <!-- MOT DE PASSE -->
+    <a asp-page="./ChangePassword"
+       id="change-password"
+       class="block px-4 py-3 rounded-lg
+        font-label text-xs uppercase tracking-widest
+        transition-colors
+        @ClasseLien(
+           EstActif(
+               ManageNavPages.ChangePasswordNavClass(ViewContext)
+           )
+       )">
+        Mot de passe
+    </a>
+
+
+    <!-- CONNEXIONS EXTERNES -->
+    @if (hasExternalLogins)
+    {
+        <a asp-page="./ExternalLogins"
+           id="external-login"
+           class="block px-4 py-3 rounded-lg
+            font-label text-xs uppercase tracking-widest
+            transition-colors
+            @ClasseLien(
+               EstActif(
+                   ManageNavPages.ExternalLoginsNavClass(ViewContext)
+               )
+           )">
+            Connexions externes
+        </a>
+    }
+
+
+    <!-- AUTHENTIFICATION À DEUX FACTEURS -->
+    <a asp-page="./TwoFactorAuthentication"
+       id="two-factor"
+       class="block px-4 py-3 rounded-lg
+        font-label text-xs uppercase tracking-widest
+        transition-colors
+        @ClasseLien(
+           EstActif(
+               ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)
+           )
+       )">
+        Authentification à deux facteurs
+    </a>
+
+
+    <!-- DONNÉES PERSONNELLES -->
+    <a asp-page="./PersonalData"
+       id="personal-data"
+       class="block px-4 py-3 rounded-lg
+        font-label text-xs uppercase tracking-widest
+        transition-colors
+        @ClasseLien(
+           EstActif(
+               ManageNavPages.PersonalDataNavClass(ViewContext)
+           )
+       )">
+        Données personnelles
+    </a>
+
+</nav>

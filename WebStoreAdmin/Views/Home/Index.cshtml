@@ -1,0 +1,600 @@
+﻿@using WebStoreAdmin.ViewModels.Parfums
+@model IEnumerable<ParfumIndexVM>
+
+@{
+    ViewData["Title"] = "Home Page";
+    var nouveautes = ViewBag.NewArrivals as List<ParfumIndexVM> ?? new List<ParfumIndexVM>();
+    var vedette = nouveautes.ElementAtOrDefault(0);
+    var petites = nouveautes.Skip(1).Take(2).ToList();
+}
+
+<body class="bg-background font-body text-on-surface antialiased px-6 pt-32 pb-20">
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center overflow-hidden pt-20 mt-5">
+        <div class="absolute inset-0 z-0">
+            <img src="~/Images/FondEcran/FE.png"
+                 alt="The Essence Hero"
+                 class="w-full h-full object-cover" />
+
+            <!-- Overlay sombre -->
+            <div class="absolute inset-0 bg-black/20"></div>
+
+            <!-- Dégradé -->
+            <div class="absolute inset-0 bg-gradient-to-r
+                from-black/60
+                via-black/45
+                to-transparent">
+            </div>
+
+            <!-- Dégradé vertical -->
+            <div class="absolute inset-0 bg-gradient-to-t
+                from-black/60
+                via-transparent
+                to-black/20">
+            </div>
+        </div>
+        <div class="relative z-10 w-full max-w-screen-2xl mx-auto px-12 lg:px-24">
+            <div class="max-w-2xl">
+                <p class="font-label text-xs uppercase tracking-[0.3em] text-secondary mb-6">Established 1894</p>
+                <h1 class="font-headline text-5xl md:text-7xl lg:text-[5rem] leading-[1.1] text-secondary mb-12">
+                    A Journey for <br />
+                    <span class="italic font-normal">the Senses.</span>
+                </h1>
+                <div class="flex flex-col sm:flex-row gap-6">
+
+                    <a class="nav-link text-muted" asp-area="" asp-controller="Parfums" asp-action="Index">
+                        <button class="border border-outline/40 px-10 py-5 rounded-lg font-label text-xs uppercase tracking-widest text-tertiary hover:bg-surface-container transition-all duration-300" asp-area="" asp-controller="Parfums" asp-action="Index">Discover Collections</button>
+                    </a>
+                    <button class="border border-outline/40 px-10 py-5 rounded-lg font-label text-xs uppercase tracking-widest text-tertiary hover:bg-surface-container transition-all duration-300">
+                        View Lookbook
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    @if (User.Identity!.IsAuthenticated &&
+        User.IsInRole(Roles.Administrateur))
+    {
+        <section class="py-20 bg-surface-container">
+            <div class="max-w-screen-2xl mx-auto px-12">
+
+                <div class="mb-12">
+                    <h2 class="font-headline text-4xl text-tertiary">
+                        Administration
+                    </h2>
+
+                    <p class="text-on-surface-variant mt-3">
+                        Accédez rapidement aux différents modules de gestion.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    <!-- Clients -->
+                    <a asp-controller="Clients"
+                       asp-action="Index"
+                       class="bg-surface rounded-xl p-8 shadow-sm border border-outline-variant/20 hover:shadow-lg transition">
+
+                        <h3 class="text-2xl font-headline text-tertiary mb-3">
+                            Clients
+                        </h3>
+
+                        <p class="text-on-surface-variant">
+                            Gérer les clients enregistrés.
+                        </p>
+
+                    </a>
+
+                    <!-- Employés -->
+                    <a asp-controller="Employes"
+                       asp-action="Index"
+                       class="bg-surface rounded-xl p-8 shadow-sm border border-outline-variant/20 hover:shadow-lg transition">
+
+                        <h3 class="text-2xl font-headline text-tertiary mb-3">
+                            Employés
+                        </h3>
+
+                        <p class="text-on-surface-variant">
+                            Gérer les employés de la boutique.
+                        </p>
+
+                    </a>
+
+                    <!-- Commandes -->
+                    <a asp-controller="Commandes"
+                       asp-action="Index"
+                       class="bg-surface rounded-xl p-8 shadow-sm border border-outline-variant/20 hover:shadow-lg transition">
+
+                        <h3 class="text-2xl font-headline text-tertiary mb-3">
+                            Commandes
+                        </h3>
+
+                        <p class="text-on-surface-variant">
+                            Consulter et gérer les commandes.
+                        </p>
+
+                    </a>
+
+                    <!-- Parfums -->
+                    <a asp-controller="Parfums"
+                       asp-action="Index"
+                       class="bg-surface rounded-xl p-8 shadow-sm border border-outline-variant/20 hover:shadow-lg transition">
+
+                        <h3 class="text-2xl font-headline text-tertiary mb-3">
+                            Parfums
+                        </h3>
+
+                        <p class="text-on-surface-variant">
+                            Gérer le catalogue des parfums.
+                        </p>
+
+                    </a>
+
+                    <!-- Catégories-->
+                    <a asp-controller="Categories"
+                       asp-action="Index"
+                       class="bg-surface rounded-xl p-8 shadow-sm border border-outline-variant/20 hover:shadow-lg transition">
+
+                        <h3 class="text-2xl font-headline text-tertiary mb-3">
+                            Catégories
+                        </h3>
+
+                        <p class="text-on-surface-variant">
+                            Gérer les différentes catégories.
+                        </p>
+
+                    </a>
+
+                    <!-- Vendeurs -->
+                    <a asp-controller="Employes"
+                       asp-action="Index"
+                       class="bg-surface rounded-xl p-8 shadow-sm border border-outline-variant/20 hover:shadow-lg transition">
+
+                        <h3 class="text-2xl font-headline text-tertiary mb-3">
+                            Vendeurs
+                        </h3>
+
+                        <p class="text-on-surface-variant">
+                            Gérer les comptes vendeurs.
+                        </p>
+
+                    </a>
+
+                    <!-- Statistiques -->
+                    @* <a asp-controller="Admin"
+                       asp-action="Dashboard"
+                       class="bg-surface rounded-xl p-8 shadow-sm border border-outline-variant/20 hover:shadow-lg transition">
+
+                        <h3 class="text-2xl font-headline text-tertiary mb-3">
+                            Tableau de bord
+                        </h3>
+
+                        <p class="text-on-surface-variant">
+                            Consulter les statistiques globales.
+                        </p>
+
+                    </a> *@
+
+                </div>
+
+            </div>
+        </section>
+    }
+    <!-- New Arrivals - Bento Layout -->
+    @if (nouveautes.Any())
+    {
+        <section class="py-32 bg-surface-container-low overflow-hidden">
+            <div class="max-w-screen-2xl mx-auto px-12">
+                <div class="flex justify-between items-end mb-16">
+                    <div>
+                        <h2 class="font-headline text-4xl text-tertiary mb-4">New Arrivals</h2>
+                        <p class="text-on-surface-variant max-w-md font-body leading-relaxed">The latest compositions from our Master Parfumer, blending rare botanicals with contemporary artistry.</p>
+                    </div>
+                    <a asp-controller="Parfums" asp-action="Index" class="text-primary font-label text-xs uppercase tracking-widest border-b border-primary/20 hover:border-primary transition-all pb-1 mb-2">View All</a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                    <!-- Large Feature : le tout dernier parfum ajouté -->
+                    @if (vedette != null)
+                    {
+                        <a asp-controller="Parfums" asp-action="Details" asp-route-id="@vedette.Id" class="md:col-span-7 group cursor-pointer">
+                            <div class="relative overflow-hidden aspect-[16/10] bg-surface-variant mb-6">
+                                <img alt="@vedette.Nom" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="@(vedette.ImagePrincipale?.Url ?? "/images/parfums/placeholder.png")" />
+                                <div class="absolute top-6 left-6">
+                                    <span class="bg-secondary-container text-on-secondary-container px-4 py-1 rounded-full text-[10px] uppercase font-label tracking-widest">Nouveauté</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-headline text-2xl text-tertiary">@vedette.Nom</h3>
+                                    <p class="text-on-surface-variant text-sm font-body">@vedette.Marque</p>
+                                </div>
+                                <span class="font-headline text-xl text-tertiary">@vedette.Prix.ToString("0.00") $</span>
+                            </div>
+                        </a>
+                    }
+                    <!-- Small Grid Items : les 2 parfums suivants -->
+                    <div class="md:col-span-5 grid grid-rows-2 gap-8">
+                        @foreach (var parfum in petites)
+                        {
+                            <a asp-controller="Parfums" asp-action="Details" asp-route-id="@parfum.Id" class="group cursor-pointer">
+                                <div class="relative overflow-hidden aspect-[16/8] bg-surface-variant mb-4">
+                                    <img alt="@parfum.Nom" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="@(parfum.ImagePrincipale?.Url ?? "/images/parfums/placeholder.png")" />
+                                </div>
+                                <h4 class="font-headline text-xl text-tertiary">@parfum.Nom</h4>
+                                <p class="text-on-surface-variant text-xs font-label uppercase tracking-widest mt-1">@parfum.Marque</p>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+    <!-- Best Sellers Section -->
+    <section class="py-32 bg-surface">
+        <div class="max-w-screen-2xl mx-auto px-12">
+            <div class="text-center mb-20">
+                <span class="font-label text-xs uppercase tracking-[0.4em] text-secondary">The Icons</span>
+                <h2 class="font-headline text-4xl text-tertiary mt-4">Beloved Classics</h2>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 ms-3">
+            @await Html.PartialAsync("_ParfumsIndexPartial", Model)
+        </div>
+    </section>
+    <!-- Our Heritage Section -->
+    <section class="py-32 bg-surface-container">
+        <div class="max-w-screen-2xl mx-auto px-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-24">
+                <div class="relative">
+                    <div class="aspect-[4/5] bg-surface-variant overflow-hidden">
+                        <img alt="Heritage Story" class="w-full h-full object-cover" data-alt="vintage apothecary jars filled with dried flowers and essential oils on an aged wooden workshop table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJbhh6nKcYhubts047LyltRuQf93CZYdnbwu0T6zuJ3_lH39DvRijEFlnRR7nWL4OMBuvpIMbpVTGmSJ3HzMMVU0KGqVr0Q_P8xz8I7OrYlOK0hBRfR_uLRIbAGrx8SytIl3sueUKglCPf9mWY3NqqflbfwXuNqhzrhHSkTFQTt7b_ZHd-RYMREDX53ibLQhtXi-ljIVJE3vL742wrhWV8aXld71-w5ntWmlsuw9mjh7o5Ws1u1BFHSgCNMPwmpFMJD1RLT1m5oJ4" />
+                    </div>
+                    @*  <div class="absolute -bottom-12 -right-12 w-64 h-64 border border-outline-variant/30 hidden lg:block"></div> *@
+                </div>
+                <div class="pr-12">
+                    <span class="font-label text-xs uppercase tracking-[0.4em] text-secondary">Our Legacy</span>
+                    <h2 class="font-headline te xt-4xl lg:text-5xl text-tertiary mt-6 mb-10 leading-tight">Crafting Memories <br /><span class="italic font-normal">Since 1894.</span></h2>
+                    <p class="font-body text-on-surface-variant leading-relaxed text-lg mb-8">
+                        Founded in the heart of Grasse, L'Essence Atelier began as a small family apothecary dedicated to capturing the ephemeral beauty of the Provençal landscape.
+                    </p>
+                    <p class="font-body text-on-surface-variant leading-relaxed text-lg mb-12">
+                        Today, we maintain the same meticulous standards, sourcing rare blossoms from our private gardens and distilling them using techniques passed down through four generations of master perfumers. Each bottle is a testament to our enduring pursuit of olfactory perfection.
+                    </p>
+                    <a class="inline-flex items-center text-primary font-label text-xs uppercase tracking-widest group" href="#">
+                        Read Our Story
+                        <span class="material-symbols-outlined ml-3 group-hover:translate-x-2 transition-transform" data-icon="arrow_right_alt">arrow_right_alt</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ========================================================= -->
+    <!-- MODAL ACTIONS PARFUM -->
+    <!-- ========================================================= -->
+
+    <div id="modalActionsParfum"
+         class="fixed inset-0 z-[9999] hidden">
+
+        <!-- Overlay -->
+        <div id="modalActionsOverlay"
+             class="absolute inset-0 bg-black/60 backdrop-blur-sm">
+        </div>
+
+        <!-- Fenêtre -->
+        <div class="relative z-10 flex min-h-full items-center justify-center p-4">
+
+            <div id="actionsParfumContent"
+                 class="w-full max-w-lg
+                rounded-2xl
+                bg-white
+                shadow-2xl
+                overflow-hidden
+                transform transition-all duration-300
+                scale-95 opacity-0">
+
+                <!-- Header -->
+                <div class="flex items-center justify-between
+                    px-6 py-5
+                    border-b border-gray-200">
+
+                    <div>
+                        <p class="text-xs uppercase tracking-[0.25em]
+                            text-gray-400">
+                            Gestion du parfum
+                        </p>
+
+                        <h2 id="modalParfumNom"
+                            class="font-headline text-2xl text-gray-900 mt-1">
+                        </h2>
+                    </div>
+
+                    <button type="button"
+                            id="fermerModalActions"
+                            class="w-10 h-10
+                        flex items-center justify-center
+                        rounded-full
+                        text-gray-500
+                        hover:bg-gray-100
+                        hover:text-gray-900
+                        transition">
+
+                        <span class="text-2xl">&times;</span>
+
+                    </button>
+
+                </div>
+
+                <!-- Informations -->
+                <div class="px-6 py-5">
+
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+
+                        <div class="rounded-xl bg-gray-50 p-4">
+                            <p class="text-xs uppercase tracking-wider text-gray-400">
+                                Marque
+                            </p>
+
+                            <p id="modalParfumMarque"
+                               class="font-semibold text-gray-900 mt-1">
+                            </p>
+                        </div>
+
+                        <div class="rounded-xl bg-gray-50 p-4">
+                            <p class="text-xs uppercase tracking-wider text-gray-400">
+                                Prix
+                            </p>
+
+                            <p id="modalParfumPrix"
+                               class="font-semibold text-gray-900 mt-1">
+                            </p>
+                        </div>
+
+                        <div class="rounded-xl bg-gray-50 p-4">
+                            <p class="text-xs uppercase tracking-wider text-gray-400">
+                                Volume
+                            </p>
+
+                            <p id="modalParfumVolume"
+                               class="font-semibold text-gray-900 mt-1">
+                            </p>
+                        </div>
+
+                        <div class="rounded-xl bg-gray-50 p-4">
+                            <p class="text-xs uppercase tracking-wider text-gray-400">
+                                Stock
+                            </p>
+
+                            <p id="modalParfumStock"
+                               class="font-semibold text-gray-900 mt-1">
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-6">
+
+                        <p class="text-xs uppercase tracking-wider text-gray-400 mb-2">
+                            Description
+                        </p>
+
+                        <p id="modalParfumDescription"
+                           class="text-sm text-gray-600 leading-relaxed">
+                        </p>
+
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+
+                        <!-- Détails -->
+                        <a id="modalParfumDetails"
+                           href="#"
+                           class="flex items-center justify-center
+                            px-4 py-3
+                            rounded-xl
+                            bg-gray-900
+                            text-white
+                            text-sm font-semibold
+                            hover:bg-gray-800
+                            transition">
+
+                            Détails
+
+                        </a>
+
+                        <!-- Modifier -->
+                        <a id="modalParfumEdit"
+                           href="#"
+                           class="flex items-center justify-center
+                            px-4 py-3
+                            rounded-xl
+                            bg-primary
+                            text-white
+                            text-sm font-semibold
+                            hover:brightness-110
+                            transition">
+
+                            Modifier
+
+                        </a>
+
+                        <!-- Supprimer -->
+                        <a id="modalParfumDelete"
+                           href="#"
+                           class="flex items-center justify-center
+                            px-4 py-3
+                            rounded-xl
+                            bg-red-600
+                            text-white
+                            text-sm font-semibold
+                            hover:bg-red-700
+                            transition">
+
+                            Supprimer
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script>
+            document.addEventListener("DOMContentLoaded", function() {
+
+                const modal = document.getElementById("modalActionsParfum");
+                const overlay = document.getElementById("modalActionsOverlay");
+                const content = document.getElementById("actionsParfumContent");
+                const fermer = document.getElementById("fermerModalActions");
+
+                if (!modal) {
+                    console.error("Le modalActionsParfum est introuvable.");
+                    return;
+                }
+
+                /*
+                 * OUVRIR LE MODAL
+                 */
+                document.addEventListener("click", function(event) {
+
+                    const bouton = event.target.closest(".btn-actions");
+
+                    if (!bouton) {
+                        return;
+                    }
+
+                    event.preventDefault();
+
+                    // Récupération des données
+                    const id = bouton.dataset.id;
+                    const nom = bouton.dataset.nom || "";
+                    const marque = bouton.dataset.marque || "";
+                    const description = bouton.dataset.description || "";
+                    const prix = bouton.dataset.prix || "0.00";
+                    const volume = bouton.dataset.volume || "";
+                    const stock = bouton.dataset.stock || "";
+
+                    const detailsUrl = bouton.dataset.detailsUrl || "#";
+                    const editUrl = bouton.dataset.editUrl || "#";
+                    const deleteUrl = bouton.dataset.deleteUrl || "#";
+
+                    // Remplissage du modal
+                    document.getElementById("modalParfumNom").textContent = nom;
+
+                    document.getElementById("modalParfumMarque").textContent =
+                        marque;
+
+                    document.getElementById("modalParfumPrix").textContent =
+                        prix.replace(".", ",") + " $";
+
+                    document.getElementById("modalParfumVolume").textContent =
+                        volume + " ml";
+
+                    document.getElementById("modalParfumStock").textContent =
+                        stock;
+
+                    document.getElementById("modalParfumDescription").textContent =
+                        description;
+
+                    // URLs
+                    document.getElementById("modalParfumDetails").href =
+                        detailsUrl;
+
+                    document.getElementById("modalParfumEdit").href =
+                        editUrl;
+
+                    document.getElementById("modalParfumDelete").href =
+                        deleteUrl;
+
+                    // Affichage
+                    modal.classList.remove("hidden");
+
+                    // Petite animation
+                    requestAnimationFrame(function() {
+
+                        content.classList.remove(
+                            "scale-95",
+                            "opacity-0"
+                        );
+
+                        content.classList.add(
+                            "scale-100",
+                            "opacity-100"
+                        );
+
+                    });
+
+                    // Bloquer le scroll
+                    document.body.classList.add("overflow-hidden");
+                });
+
+
+                /*
+                 * FERMER LE MODAL
+                 */
+                function fermerModal() {
+
+                    content.classList.remove(
+                        "scale-100",
+                        "opacity-100"
+                    );
+
+                    content.classList.add(
+                        "scale-95",
+                        "opacity-0"
+                    );
+
+                    setTimeout(function() {
+
+                        modal.classList.add("hidden");
+
+                        document.body.classList.remove(
+                            "overflow-hidden"
+                        );
+
+                    }, 200);
+                }
+
+
+                /*
+                 * Bouton X
+                 */
+                fermer?.addEventListener(
+                    "click",
+                    fermerModal
+                );
+
+
+                /*
+                 * Cliquer sur l'arrière-plan
+                 */
+                overlay?.addEventListener(
+                    "click",
+                    fermerModal
+                );
+
+
+                /*
+                 * Touche ESC
+                 */
+                document.addEventListener(
+                    "keydown",
+                    function(event) {
+
+                        if (event.key === "Escape" &&
+                            !modal.classList.contains("hidden")) {
+
+                            fermerModal();
+                        }
+
+                    }
+                );
+
+            });
+    </script>
+</body>

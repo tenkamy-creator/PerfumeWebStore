@@ -1,0 +1,225 @@
+﻿@using WebStoreAdmin.ViewModels.Parfums
+
+@model IEnumerable<ParfumIndexVM>
+
+@foreach (var parfum in Model)
+{
+    <div class="group flex flex-col
+        overflow-hidden
+        rounded-2xl
+        bg-white
+        border border-gray-200
+        shadow-sm
+        transition-all duration-300
+        hover:-translate-y-2
+        hover:shadow-2xl">
+
+        <!-- IMAGE -->
+        <a asp-controller="Parfums"
+            asp-action="Details"
+           asp-route-id="@parfum.Id">
+
+            <div class="relative bg-surface-container-low
+                aspect-[3/4]
+                flex items-center justify-center
+                p-10 overflow-hidden">
+
+                <img src="@(parfum.ImagePrincipale?.Url ?? "https://placehold.co/300x400")"
+                     alt="@parfum.Nom"
+                     class="w-full h-full object-cover
+                transition-transform duration-500
+                group-hover:scale-105" />
+
+            </div>
+
+        </a>
+
+        <!-- INFOS -->
+        <div class="flex-1 flex flex-col px-6 p-6">
+
+            <div class="flex flex-wrap gap-2 mb-3">
+
+                <span class="bg-surface-container-highest
+                    px-2 py-0.5 rounded-full
+                    text-[9px] uppercase font-label
+                    text-on-surface-variant">
+
+                    @parfum.Categorie.Nom
+
+                </span>
+
+                <span class="bg-surface-container-highest
+                    px-2 py-0.5 rounded-full
+                    text-[9px] uppercase font-label
+                    text-on-surface-variant">
+
+                    @parfum.Genre
+
+                </span>
+
+                @if (parfum.Stock > 0)
+                {
+                    <span class="bg-surface-container-highest
+                        px-2 py-0.5 rounded-full
+                        text-[9px] uppercase font-label
+                        text-on-surface-variant">
+
+                        En stock
+
+                    </span>
+                }
+                else
+                {
+                    <span class="bg-red-100
+                        px-2 py-0.5 rounded-full
+                        text-[9px] uppercase font-label
+                        text-red-600">
+
+                        Rupture
+
+                    </span>
+                }
+
+            </div>
+
+            <a asp-action="Details"
+               asp-route-id="@parfum.Id">
+
+                <h3 class="font-headline text-lg text-tertiary">
+                    @parfum.Nom
+                </h3>
+
+            </a>
+
+            <div class="flex items-center justify-between mb-2">
+
+                <p class="text-on-surface-variant text-sm">
+                    @parfum.Marque
+                </p>
+
+                <span class="px-2 py-1 text-xs rounded-full
+                    bg-blue-100 text-blue-700 font-medium">
+
+                    @parfum.Volume ml
+
+                </span>
+
+            </div>
+
+            <p class="font-body text-sm mb-4 line-clamp-2 flex-1">
+                @parfum.Description
+            </p>
+
+            <div class="flex items-center justify-between mt-auto mb-3">
+
+                <div>
+
+                    <p class="text-xs uppercase tracking-wider
+                        text-on-surface-variant">
+
+                        Prix
+
+                    </p>
+
+                    <p class="font-headline text-2xl text-primary font-bold">
+
+                        @parfum.Prix.ToString("0.00") $
+
+                    </p>
+
+                </div>
+                @if (parfum.Stock > 0)
+                {
+                    @if (User.Identity!.IsAuthenticated)
+                    {
+                        <form asp-controller="Panier"
+                              asp-action="Ajouter"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="parfumId"
+                                   value="@parfum.Id" />
+
+                            <button type="submit"
+                                    class="inline-flex items-center gap-2
+                                px-5 py-3
+                                rounded-xl
+                                bg-primary
+                                text-white
+                                font-semibold
+                                shadow-lg
+                                transition-all duration-300
+                                hover:bg-primary/90
+                                hover:shadow-xl
+                                hover:scale-105">
+
+                                Ajouter
+
+                            </button>
+
+                        </form>
+                    }
+                    else
+                    {
+                        <a asp-area="Identity"
+                           asp-page="/Account/Login"
+                           asp-route-returnUrl="@Context.Request.Path"
+                           class="inline-flex items-center gap-2
+                            px-5 py-3
+                            rounded-xl
+                            bg-primary
+                            text-white
+                            font-semibold
+                            shadow-lg
+                            transition-all duration-300
+                            hover:bg-primary/90
+                            hover:shadow-xl
+                            hover:scale-105">
+
+                            Ajouter
+
+                        </a>
+                    }
+                }
+
+            </div>
+
+            @if (User.IsInRole(WebStoreAdmin.Models.Roles.Administrateur))
+            {
+                <!-- BOUTON ACTIONS -->
+                <button type="button"
+                        class="btn-actions w-full inline-flex items-center justify-center gap-2
+                    px-4 py-2.5
+                    rounded-xl
+                    border border-gray-300
+                    text-sm font-semibold
+                    text-on-surface-variant
+                    transition-all duration-200
+                    hover:bg-surface-container-highest
+                    hover:border-gray-400"
+                        data-id="@parfum.Id"
+                        data-nom="@parfum.Nom"
+                        data-marque="@parfum.Marque"
+                        data-description="@parfum.Description"
+                        data-prix="@parfum.Prix.ToString("0.00")"
+                        data-volume="@parfum.Volume"
+                        data-stock="@parfum.Stock"
+                        data-categorie="@parfum.Categorie.Nom"
+                        data-genre="@parfum.Genre"
+                        data-image-principale="@(parfum.ImagePrincipale?.Url ?? "https://placehold.co/300x400")"
+                        data-images='@Html.Raw(System.Text.Json.JsonSerializer.Serialize(parfum.Images.Where(i => !i.ImagePrincipale).Select(i => i.Url)))'
+                        data-details-url="@Url.Action("Details", "Parfums", new { id = parfum.Id })"
+                        data-edit-url="@Url.Action("Edit", "Parfums", new { id = parfum.Id })"
+                        data-delete-url="@Url.Action("Delete", "Parfums")">
+
+                    Actions
+
+                </button>
+            }
+
+        </div>
+
+    </div>
+}

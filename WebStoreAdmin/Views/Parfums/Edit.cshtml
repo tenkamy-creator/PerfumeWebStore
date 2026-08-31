@@ -1,0 +1,478 @@
+﻿@model WebStoreAdmin.ViewModels.Parfums.ParfumModifierVM
+
+@{
+    ViewData["Title"] = "Modifier un parfum";
+}
+
+<div class="max-w-6xl mx-auto px-8 py-12 pt-32 pb-20">
+
+    <div class="bg-surface-container-low rounded-2xl shadow-lg overflow-hidden border border-outline-variant/20">
+
+        <!-- HEADER -->
+
+        <div class="px-8 py-6 border-b border-outline-variant/20">
+
+            <h1 class="text-3xl font-headline text-tertiary">
+                Modifier un parfum
+            </h1>
+
+            <p class="text-on-surface-variant mt-2">
+                Modifiez les informations du parfum ainsi que ses images.
+            </p>
+
+        </div>
+
+        <form asp-action="Edit"
+              method="post"
+              enctype="multipart/form-data">
+
+            @Html.AntiForgeryToken()
+
+            <input asp-for="Id" type="hidden" />
+
+            <div asp-validation-summary="ModelOnly"
+                 class="m-8 p-4 rounded-lg bg-red-100 text-red-700">
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-10 p-8">
+
+                <!-- INFORMATIONS -->
+
+                <div class="space-y-6">
+
+                    <div>
+
+                        <label asp-for="Nom"
+                               class="block mb-2 font-medium">
+                        </label>
+
+                        <input asp-for="Nom"
+                               class="w-full rounded-lg border border-outline-variant px-4 py-3" />
+
+                        <span asp-validation-for="Nom"
+                              class="text-red-600 text-sm">
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <label asp-for="Marque"
+                               class="block mb-2 font-medium">
+                        </label>
+
+                        <input asp-for="Marque"
+                               class="w-full rounded-lg border border-outline-variant px-4 py-3" />
+
+                    </div>
+
+                    <div>
+
+                        <label asp-for="Description"
+                               class="block mb-2 font-medium">
+                        </label>
+
+                        <textarea asp-for="Description"
+                                  rows="4"
+                                  class="w-full rounded-lg border border-outline-variant px-4 py-3">
+                        </textarea>
+
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+
+                        <div>
+                            <label asp-for="Prix" class="block mb-2 font-medium"></label>
+                            <input asp-for="Prix"
+                                   type="number"
+                                   lang="en"
+                                   step="any"
+                                   class="w-full rounded-lg border border-outline-variant p-3" />
+                        </div>
+
+                        <div>
+                            <label asp-for="Genre" class="block mb-2 font-medium"></label>
+                            <select asp-for="Genre"
+                                    asp-items="Model.Genres"
+                                    class="w-full rounded-lg border border-outline-variant p-3">
+                                <option value="">
+                                    -- Choisir un genre --
+                                </option>
+                            </select>
+                            <span asp-validation-for="Genre" class="text-red-600 text-sm"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+
+                        <div class="mb-4">
+                            <label asp-for="Volume" class="block text-sm font-medium mb-2"></label>
+                            <div class="relative">
+                                <input asp-for="Volume"
+                                       type="number"
+                                       lang="en"
+                                       step="any"
+                                       min="1"
+                                       class="w-full rounded-lg border border-gray-300 px-4 py-3 pr-12" />
+                                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
+                                    ml
+                                </span>
+                            </div>
+                            <span asp-validation-for="Volume" class="text-red-600 text-sm"></span>
+                        </div>
+
+                        <div>
+                            <label asp-for="Stock" class="block mb-2 font-medium"></label>
+                            <input asp-for="Stock"
+                                   class="w-full rounded-lg border border-outline-variant px-4 py-3" />
+                        </div>
+
+                    </div>
+
+                    <div>
+
+                        <label asp-for="CategorieId"
+                               class="block mb-2 font-medium">
+                        </label>
+
+                        <select asp-for="CategorieId"
+                                asp-items="Model.Categories"
+                                class="w-full rounded-lg border border-outline-variant px-4 py-3">
+
+                            <option value="">
+                                -- Choisir une catégorie --
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="CategorieId"
+                              class="text-red-600 text-sm">
+                        </span>
+
+                    </div>
+
+                    <!-- NOTES OLFACTIVES -->
+                    <div>
+                        <label class="block mb-2 font-medium">Notes de tête</label>
+                        <select asp-for="NotesTeteIds"
+                                asp-items="Model.NotesDisponibles"
+                                multiple
+                                class="w-full rounded-lg border border-outline-variant p-3 h-32">
+                        </select>
+                        <p class="text-xs text-gray-500 mt-1">Maintiens Ctrl (ou Cmd) pour sélectionner plusieurs notes.</p>
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 font-medium">Notes de cœur</label>
+                        <select asp-for="NotesCoeurIds"
+                                asp-items="Model.NotesDisponibles"
+                                multiple
+                                class="w-full rounded-lg border border-outline-variant p-3 h-32">
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 font-medium">Notes de fond</label>
+                        <select asp-for="NotesFondIds"
+                                asp-items="Model.NotesDisponibles"
+                                multiple
+                                class="w-full rounded-lg border border-outline-variant p-3 h-32">
+                        </select>
+                    </div>
+
+                </div>
+
+                <!-- IMAGES -->
+
+                <div>
+
+                    <h2 class="text-xl font-semibold mb-4">
+                        Images actuelles
+                    </h2>
+
+                    <div class="grid grid-cols-2 gap-4">
+
+                        @foreach (var image in Model.ImagesExistantes)
+                        {
+                            <div class="rounded-xl overflow-hidden border border-outline-variant shadow">
+
+                                <img src="@image.Url"
+                                     class="w-full h-48 object-cover" />
+
+                                <div class="p-4">
+
+                                    <label class="flex items-center gap-2">
+
+                                        <input type="radio"
+                                               class="existante-principale-radio"
+                                               asp-for="ImagePrincipaleId"
+                                               value="@image.Id" />
+
+                                        <span>Image principale</span>
+
+                                    </label>
+
+                                    @if (image.ImagePrincipale)
+                                    {
+                                        <div class="mt-2 inline-block bg-primary text-white text-xs px-3 py-1 rounded-full">
+                                            Actuelle
+                                        </div>
+                                    }
+
+                                    <button type="button"
+                                            class="btn-supprimer-image mt-4 w-full bg-red-600 hover:bg-red-700 text-white rounded-lg py-2"
+                                            data-form-id="delete-form-@image.Id">
+
+                                        Supprimer
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+
+                    <hr class="my-8" />
+
+                    <h2 class="text-xl font-semibold mb-4">
+                        Ajouter des images
+                    </h2>
+
+                    <input asp-for="Images"
+                           id="nouvellesImagesInput"
+                           multiple
+                           type="file"
+                           class="block w-full rounded-lg border border-outline-variant px-4 py-3" />
+
+                    <span asp-validation-for="Images"
+                          class="text-red-600">
+                    </span>
+
+                    <input asp-for="NouvelleImagePrincipaleIndex"
+                           id="nouvelleImagePrincipaleIndex"
+                           type="hidden" />
+
+                    <div id="apercuNouvellesImages"
+                         class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- FOOTER -->
+
+            <div class="border-t border-outline-variant/20 px-8 py-6 flex justify-end gap-4">
+
+                <a asp-action="Index"
+                   class="px-6 py-3 rounded-lg border border-outline-variant hover:bg-surface-container-high">
+
+                    Annuler
+
+                </a>
+
+                <button type="submit"
+                        class="px-8 py-3 rounded-lg bg-primary text-white hover:opacity-90">
+
+                    Enregistrer
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+@foreach (var image in Model.ImagesExistantes)
+{
+    <form id="delete-form-@image.Id"
+          asp-action="SupprimerImage"
+          method="post"
+          class="hidden">
+
+        @Html.AntiForgeryToken()
+
+        <input type="hidden"
+               name="imageId"
+               value="@image.Id" />
+
+    </form>
+}
+
+<!-- ============================= -->
+<!-- MODALE CONFIRMATION SUPPRESSION IMAGE -->
+<!-- ============================= -->
+<div id="modalConfirmationImage"
+     class="hidden fixed inset-0 z-[60]
+    flex items-center justify-center
+    bg-black/50 p-4">
+
+    <div class="bg-white rounded-2xl shadow-2xl
+        w-full max-w-md
+        p-8 text-center">
+
+        <div class="w-16 h-16 mx-auto mb-6
+            rounded-full bg-red-100
+            flex items-center justify-center">
+            <span class="material-symbols-outlined text-red-600 text-3xl">
+                delete
+            </span>
+        </div>
+
+        <h3 class="font-headline text-xl text-tertiary mb-2">
+            Confirmer la suppression
+        </h3>
+
+        <p class="text-on-surface-variant text-sm mb-8">
+            Voulez-vous vraiment supprimer cette image ? Cette action est irréversible.
+        </p>
+
+        <div class="flex gap-3">
+
+            <button type="button"
+                    id="btnAnnulerSuppressionImage"
+                    class="flex-1 px-4 py-3 rounded-xl
+                border border-gray-300 font-semibold
+                text-on-surface-variant
+                hover:bg-surface-container-highest transition-colors">
+                Annuler
+            </button>
+
+            <button type="button"
+                    id="btnConfirmerSuppressionImage"
+                    class="flex-1 px-4 py-3 rounded-xl
+                bg-red-600 text-white font-semibold
+                hover:bg-red-700 transition-colors">
+                Supprimer
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const input = document.getElementById("nouvellesImagesInput");
+            const preview = document.getElementById("apercuNouvellesImages");
+            const hidden = document.getElementById("nouvelleImagePrincipaleIndex");
+            const anciennes = document.querySelectorAll(".existante-principale-radio");
+
+            input.addEventListener("change", () => {
+
+                preview.innerHTML = "";
+                hidden.value = "";
+
+                [...input.files].forEach((file, index) => {
+
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+
+                        preview.innerHTML += `
+
+        <div class="rounded-xl overflow-hidden shadow border">
+
+        <img src="${e.target.result}"
+        class="w-full h-40 object-cover"/>
+
+        <div class="p-3">
+
+        <label class="flex items-center gap-2">
+
+        <input type="radio"
+        name="nouvellePrincipale"
+        class="nouvelle-principale"
+        value="${index}">
+
+        <span>Image principale</span>
+
+        </label>
+
+        </div>
+
+        </div>
+
+        `;
+
+                        document.querySelectorAll(".nouvelle-principale").forEach(r => {
+
+                            r.onchange = function() {
+
+                                hidden.value = this.value;
+
+                                anciennes.forEach(a => a.checked = false);
+
+                            }
+
+                        });
+
+                    }
+
+                    reader.readAsDataURL(file);
+
+                });
+
+            });
+
+            anciennes.forEach(r => {
+
+                r.onchange = function() {
+
+                    hidden.value = "";
+
+                    document.querySelectorAll(".nouvelle-principale").forEach(x => x.checked = false);
+
+                }
+
+            });
+
+            // Gestion de la confirmation de suppression d'image via modale personnalisée
+            let formImageASoumettre = null;
+
+            document.querySelectorAll('.btn-supprimer-image').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const formId = this.dataset.formId;
+                    formImageASoumettre = document.getElementById(formId);
+                    document.getElementById('modalConfirmationImage').classList.remove('hidden');
+                });
+            });
+
+            document.getElementById('btnConfirmerSuppressionImage').addEventListener('click', function() {
+                if (formImageASoumettre) {
+                    formImageASoumettre.submit();
+                }
+            });
+
+            document.getElementById('btnAnnulerSuppressionImage').addEventListener('click', function() {
+                formImageASoumettre = null;
+                document.getElementById('modalConfirmationImage').classList.add('hidden');
+            });
+
+            document.getElementById('modalConfirmationImage').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    formImageASoumettre = null;
+                    this.classList.add('hidden');
+                }
+            });
+
+        });
+
+    </script>
+
+}

@@ -1,0 +1,36 @@
+﻿@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Confirmation d'inscription";
+}
+
+<main class="min-h-[70vh] flex items-center justify-center px-6 pt-32 pb-20 bg-background">
+    <div class="w-full max-w-lg bg-surface-container-low rounded-xl shadow-xl p-10 border border-outline-variant/20 text-center">
+
+        <span class="material-symbols-outlined text-6xl text-primary mb-4">mark_email_unread</span>
+        <h1 class="font-headline text-3xl text-tertiary mb-6">@ViewData["Title"]</h1>
+
+        @{
+            if (@Model.DisplayConfirmAccountLink)
+            {
+                <div class="bg-blue-50 border border-blue-200 text-blue-700 rounded-lg p-4 text-sm text-left">
+                    <p class="mb-2">
+                        Cette application n'a actuellement aucun expéditeur de courriel réel enregistré, consultez
+                        <a href="https://aka.ms/aspaccountconf" class="underline">cette documentation</a> pour configurer un véritable expéditeur.
+                    </p>
+                    <p>
+                        Normalement, ceci serait envoyé par courriel :
+                        <a id="confirm-link" href="@Model.EmailConfirmationUrl" class="underline font-medium">Cliquez ici pour confirmer votre compte</a>
+                    </p>
+                </div>
+            }
+            else
+            {
+                <p class="text-on-surface-variant">
+                    Veuillez vérifier votre courriel pour confirmer votre compte.
+                </p>
+            }
+        }
+
+    </div>
+</main>

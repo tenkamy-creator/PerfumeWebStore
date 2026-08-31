@@ -1,0 +1,19 @@
+﻿@model string
+
+@if (!String.IsNullOrEmpty(Model))
+{
+    var estErreur = Model.StartsWith("Error");
+    var classesCouleur = estErreur
+        ? "bg-red-50 border-red-200 text-red-700"
+        : "bg-green-50 border-green-200 text-green-700";
+
+    <div class="relative flex items-start gap-3 rounded-lg border p-4 mb-6 @classesCouleur" role="alert">
+        <span class="flex-1 text-sm">@Model</span>
+        <button type="button"
+                onclick="this.closest('[role=alert]').remove()"
+                aria-label="Fermer"
+                class="text-lg leading-none opacity-60 hover:opacity-100 transition-opacity">
+            &times;
+        </button>
+    </div>
+}

@@ -1,0 +1,11 @@
+﻿namespace WebStoreAdmin.ViewModels.Avis
+{
+    public class AvisDetailsVM
+    {
+        public int Id { get; set; }
+        public int Note { get; set; }
+        public string Commentaire { get; set; } = default!;
+        public int ClientId { get; set; }
+        public int ParfumId { get; set; }
+    }
+}

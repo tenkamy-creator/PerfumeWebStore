@@ -1,0 +1,645 @@
+﻿@using X.PagedList
+@model IPagedList<WebStoreAdmin.ViewModels.Parfums.ParfumIndexVM>
+
+<main class="pt-32 pb-20 max-w-screen-2xl mx-auto px-12 flex flex-col md:flex-row gap-16">
+
+    <!-- FORMULAIRE DE FILTRES (seulement autour de l'aside) -->
+    <form method="get" asp-action="Index" class="contents">
+
+        <!-- Champs cachés pour préserver tri + pagination quand on filtre -->
+        <input type="hidden" name="sortOrder" value="@ViewBag.SortOrder" />
+
+        <!-- Sidebar Filters -->
+        <aside class="w-full md:w-64 flex-shrink-0">
+
+            <div class="sticky top-32">
+
+                <h3 class="font-headline text-lg italic mb-6 text-tertiary">
+                    The Collection
+                </h3>
+
+                <div class="max-h-[calc(100vh-12rem)] overflow-y-auto pr-2 space-y-8">
+
+                        <!-- Gender -->
+                        <div class="group">
+
+                            <span class="font-label text-[0.7rem] uppercase tracking-[0.2rem] text-on-surface-variant block mb-4">
+                                Gender
+                            </span>
+
+                            <div class="flex flex-col space-y-3">
+
+                                <!-- Homme -->
+                                <label class="flex items-center space-x-3 cursor-pointer group/item">
+                                    <input class="w-4 h-4 border-outline-variant text-primary rounded-sm focus:ring-primary/20"
+                                           type="checkbox"
+                                           name="genre"
+                                           value="@Genres.Homme"
+                                           onchange="this.form.submit()"
+                                           @(ViewBag.SelectedGender?.Contains(Genres.Homme) == true ? "checked" : "") />
+
+                                    <span class="text-sm font-light text-on-surface/80 group-hover/item:text-primary transition-colors">
+                                        Homme
+                                    </span>
+                                </label>
+
+                                <!-- Femme -->
+                                <label class="flex items-center space-x-3 cursor-pointer group/item">
+                                    <input class="w-4 h-4 border-outline-variant text-primary rounded-sm focus:ring-primary/20"
+                                           type="checkbox"
+                                           name="genre"
+                                           value="@Genres.Femme"
+                                           onchange="this.form.submit()"
+                                           @(ViewBag.SelectedGender?.Contains(Genres.Femme) == true ? "checked" : "") />
+
+                                    <span class="text-sm font-light text-on-surface/80 group-hover/item:text-primary transition-colors">
+                                        Femme
+                                    </span>
+                                </label>
+
+                                <!-- Unisex -->
+                                <label class="flex items-center space-x-3 cursor-pointer group/item">
+                                    <input class="w-4 h-4 border-outline-variant text-primary rounded-sm focus:ring-primary/20"
+                                           type="checkbox"
+                                           name="genre"
+                                           value="@Genres.Unisex"
+                                           onchange="this.form.submit()"
+                                           @(ViewBag.SelectedGender?.Contains(Genres.Unisex) == true ? "checked" : "") />
+
+                                    <span class="text-sm font-light text-on-surface/80 group-hover/item:text-primary transition-colors">
+                                        Unisex
+                                    </span>
+                                </label>
+
+                                <!-- Garçon -->
+                                <label class="flex items-center space-x-3 cursor-pointer group/item">
+                                    <input class="w-4 h-4 border-outline-variant text-primary rounded-sm focus:ring-primary/20"
+                                           type="checkbox"
+                                           name="genre"
+                                           value="@Genres.Garçon"
+                                           onchange="this.form.submit()"
+                                           @(ViewBag.SelectedGender?.Contains(Genres.Garçon) == true ? "checked" : "") />
+
+                                    <span class="text-sm font-light text-on-surface/80 group-hover/item:text-primary transition-colors">
+                                        Garçon
+                                    </span>
+                                </label>
+
+                                <!-- Fille -->
+                                <label class="flex items-center space-x-3 cursor-pointer group/item">
+                                    <input class="w-4 h-4 border-outline-variant text-primary rounded-sm focus:ring-primary/20"
+                                           type="checkbox"
+                                           name="genre"
+                                           value="@Genres.Fille"
+                                           onchange="this.form.submit()"
+                                           @(ViewBag.SelectedGender?.Contains(Genres.Fille) == true ? "checked" : "") />
+
+                                    <span class="text-sm font-light text-on-surface/80 group-hover/item:text-primary transition-colors">
+                                        Fille
+                                    </span>
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                        <div class="group">
+
+                            <span class="font-label text-[0.7rem] uppercase tracking-[0.2rem] text-on-surface-variant block mb-4">
+                                Categories
+                            </span>
+
+                            <div class="flex flex-wrap gap-2">
+
+                                @foreach (var categorie in ViewBag.Categories)
+                                {
+                                    bool isSelected =
+                                    ViewBag.SelectedCategories != null &&
+                                    ((List<int>)ViewBag.SelectedCategories)
+                                    .Contains(categorie.Id);
+
+                                    <label class="cursor-pointer">
+
+                                        <input type="checkbox"
+                                               name="categories"
+                                               value="@categorie.Id"
+                                               class="hidden peer"
+                                               @(isSelected ? "checked" : "") 
+                                               onchange="this.form.submit()" />
+
+                                        <span class="px-3 py-1.5 rounded-full
+                                     text-[0.65rem]
+                                     uppercase tracking-wider
+                                     font-medium transition-colors
+
+                                     @(isSelected ? "bg-secondary-container text-on-secondary-container"
+                                                 : "bg-surface-container-high text-on-surface-variant hover:bg-secondary-container")">
+
+                                                    @categorie.Nom (@categorie.Parfums.Count)
+
+                                        </span>
+
+                                    </label>
+                                }
+
+                            </div>
+
+                        </div>
+
+                        <!-- Disponibilité -->
+                        <div class="group">
+
+                            <span class="font-label text-[0.7rem] uppercase tracking-[0.2rem] text-on-surface-variant block mb-4">
+                                Disponibilité
+                            </span>
+
+                            <label class="flex items-center space-x-3 cursor-pointer">
+
+                                <input class="w-4 h-4 border-outline-variant text-primary rounded-sm focus:ring-primary/20"
+                                       type="checkbox"
+                                       name="enStock"
+                                       value="true"
+                                       onchange="this.form.submit()"
+                                       @(ViewBag.EnStock == true ? "checked" : "") />
+
+                                <span class="text-sm font-light text-on-surface/80">
+                                    En stock seulement
+                                </span>
+
+                            </label>
+
+                        </div>
+
+                        <!-- Price Range -->
+                        <div class="group">
+
+                            <span class="font-label text-[0.7rem] uppercase tracking-[0.2rem]
+                 text-on-surface-variant block mb-4">
+
+                                Price Range
+
+                            </span>
+
+                            <div class="space-y-6">
+
+                                <!-- Prix minimum -->
+                                <div>
+
+                                    <div class="flex justify-between text-xs mb-2 text-on-surface-variant">
+                                        <span>Min</span>
+                                        <span id="minPriceValue">
+                                            @ViewBag.MinPrix $
+                                        </span>
+                                    </div>
+
+                                    <input type="range"
+                                           name="minPrix"
+                                           min="0"
+                                           max="500"
+                                           step="10"
+                                           value="@ViewBag.MinPrix"
+                                           onchange="this.form.submit()"
+                                           oninput="document.getElementById('minPriceValue').innerText = this.value + ' $'"
+                                           class="w-full h-1 bg-surface-container-highest rounded-lg
+                          appearance-none cursor-pointer accent-primary" />
+
+                                </div>
+
+                                <!-- Prix maximum -->
+                                <div>
+
+                                    <div class="flex justify-between text-xs mb-2 text-on-surface-variant">
+                                        <span>Max</span>
+                                        <span id="maxPriceValue">
+                                            @ViewBag.MaxPrix $
+                                        </span>
+                                    </div>
+
+                                    <input type="range"
+                                           name="maxPrix"
+                                           min="0"
+                                           max="500"
+                                           step="10"
+                                           value="@ViewBag.MaxPrix"
+                                           onchange="this.form.submit()"
+                                           oninput="document.getElementById('maxPriceValue').innerText = this.value + ' $'"
+                                           class="w-full h-1 bg-surface-container-highest rounded-lg
+                          appearance-none cursor-pointer accent-primary" />
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                                <a asp-action="Index"
+                                   class="block text-center bg-surface-container-high
+          hover:bg-primary hover:text-white
+          transition-colors rounded-lg py-3 text-sm uppercase tracking-wider">
+
+                                    Reset Filters
+
+                                </a>
+
+                    </div>
+
+                </div>
+
+        </aside>
+        </form>
+
+        <!-- Product Grid -->
+    <section class="flex-1">
+        <div class="flex items-center justify-between mb-5 pt-4 border-t border-outline-variant/20">
+            <a asp-controller="Home" asp-action="Index"
+               class="font-label text-xs uppercase tracking-widest text-outline hover:text-tertiary transition-colors">
+                &larr; Retour à l'accueil
+            </a>
+        </div>
+        <div class="mb-12 flex justify-between items-end">
+            <div>
+                <h1 class="font-headline text-4xl mb-2 text-tertiary">Summer 2024</h1>
+                <p class="font-body text-on-surface-variant/80 max-w-md">
+                    Discover scents that capture the ephemeral light of the Mediterranean coast.
+                </p>
+            </div>
+
+            @if (User.IsInRole(Roles.Administrateur))
+            {
+                <a asp-action="Create" class="px-6 py-3 bg-primary text-white rounded-lg hover:opacity-90 transition-all shadow-lg">
+                    + Nouveau parfum
+                </a>
+            }
+
+            <!-- FORMULAIRE DE TRI (séparé, lui aussi hors de la grille) -->
+            <form method="get" asp-action="Index" class="flex items-center gap-2">
+
+                <!-- Champs cachés pour préserver les filtres actuels quand on trie -->
+                @if (ViewBag.SelectedGender != null)
+                {
+                    foreach (var g in (List<Genres>)ViewBag.SelectedGender)
+                    {
+                        <input type="hidden" name="genre" value="@g" />
+                    }
+                }
+                @if (ViewBag.SelectedCategories != null)
+                {
+                    foreach (var c in (List<int>)ViewBag.SelectedCategories)
+                    {
+                        <input type="hidden" name="categories" value="@c" />
+                    }
+                }
+                <input type="hidden" name="minPrix" value="@ViewBag.MinPrix" />
+                <input type="hidden" name="maxPrix" value="@ViewBag.MaxPrix" />
+                @if (ViewBag.EnStock == true)
+                {
+                    <input type="hidden" name="enStock" value="true" />
+                }
+
+                <label class="text-[0.7rem] uppercase tracking-widest text-on-surface-variant">
+                    Sort by
+                </label>
+
+                <select name="sortOrder" onchange="this.form.submit()"
+                        class="appearance-none bg-transparent pr-8 text-[0.7rem] uppercase tracking-widest text-on-surface-variant focus:outline-none border-none">
+                    <option value="">Featured</option>
+                    <option value="price_asc" selected="@(ViewBag.SortOrder == "price_asc")">Price: Low to High</option>
+                    <option value="price_desc" selected="@(ViewBag.SortOrder == "price_desc")">Price: High to Low</option>
+                    <option value="name_asc" selected="@(ViewBag.SortOrder == "name_asc")">Name: A-Z</option>
+                    <option value="name_desc" selected="@(ViewBag.SortOrder == "name_desc")">Name: Z-A</option>
+                </select>
+
+            </form>
+
+        </div>
+
+        <p class="text-sm text-on-surface-variant mt-2 mb-5">
+            @Model.Count() parfum(s) trouvé(s)
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24">
+            @await Html.PartialAsync("_ParfumsIndexPartial", Model)
+        </div>
+
+            <div class="mt-20 mb-10 flex justify-center items-center gap-2 gap-y-24">
+
+                @if (Model.HasPreviousPage)
+                {
+                    <a asp-action="Index"
+                       asp-route-page="@(Model.PageNumber - 1)"
+                       asp-route-sortOrder="@ViewBag.SortOrder"
+                       class="px-4 py-2 rounded-lg bg-surface-container-high hover:bg-primary hover:text-white transition-colors">
+                        Previous
+                    </a>
+                }
+
+                @for (int i = 1; i <= Model.PageCount; i++)
+                {
+                    <a asp-action="Index"
+                       asp-route-page="@i"
+                       asp-route-sortOrder="@ViewBag.SortOrder"
+                       class="px-4 py-2 rounded-lg transition-colors
+                       @(i == Model.PageNumber ? "bg-primary text-white"
+                           : "bg-surface-container-high hover:bg-primary hover:text-white")">
+
+                        @i
+
+                    </a>
+                }
+
+                @if (Model.HasNextPage)
+                {
+                    <a asp-action="Index"
+                       asp-route-page="@(Model.PageNumber + 1)"
+                       asp-route-sortOrder="@ViewBag.SortOrder"
+                       class="px-4 py-2 rounded-lg bg-surface-container-high hover:bg-primary hover:text-white transition-colors">
+                        Next
+                    </a>
+                }
+
+            </div>
+
+        </section>
+</main>
+
+</main>
+
+<!-- ============================= -->
+<!-- MODALE ACTIONS (partagée)      -->
+<!-- ============================= -->
+<div id="modalActions"
+     class="hidden fixed inset-0 z-50
+    flex items-center justify-center
+    bg-black/50 p-4">
+
+    <div class="bg-white rounded-2xl shadow-2xl
+        w-full max-w-2xl
+        max-h-[90vh] overflow-y-auto
+        relative">
+
+        <!-- Bouton fermer -->
+        <button type="button"
+                id="btnFermerModal"
+                class="absolute top-4 right-4
+            w-9 h-9 flex items-center justify-center
+            rounded-full bg-surface-container-highest
+            text-on-surface-variant
+            hover:bg-gray-200 transition-colors">
+            &times;
+        </button>
+
+        <div class="p-6">
+
+            <!-- Image principale -->
+            <div class="bg-surface-container-low rounded-xl
+                aspect-[3/2] flex items-center justify-center
+                overflow-hidden mb-4">
+
+                <img id="modalImagePrincipale"
+                     src=""
+                     alt=""
+                     class="w-full h-full object-contain" />
+
+            </div>
+
+            <!-- Miniatures -->
+            <div id="modalMiniatures"
+                 class="flex gap-2 mb-6 flex-wrap">
+            </div>
+
+            <!-- Badges -->
+            <div class="flex flex-wrap gap-2 mb-3">
+                <span id="modalCategorie"
+                      class="bg-surface-container-highest px-2 py-0.5
+                rounded-full text-[9px] uppercase font-label
+                text-on-surface-variant"></span>
+                <span id="modalGenre"
+                      class="bg-surface-container-highest px-2 py-0.5
+                rounded-full text-[9px] uppercase font-label
+                text-on-surface-variant"></span>
+                <span id="modalStockBadge"
+                      class="px-2 py-0.5 rounded-full text-[9px] uppercase font-label"></span>
+            </div>
+
+            <h3 id="modalNom" class="font-headline text-xl text-tertiary mb-1"></h3>
+            <p id="modalMarque" class="text-on-surface-variant text-sm mb-3"></p>
+            <p id="modalDescription" class="font-body text-sm mb-4"></p>
+
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <p class="text-xs uppercase tracking-wider text-on-surface-variant">Prix</p>
+                    <p id="modalPrix" class="font-headline text-2xl text-primary font-bold"></p>
+                </div>
+                <span id="modalVolume"
+                      class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700 font-medium"></span>
+            </div>
+
+            <!-- Boutons d'action -->
+            <div class="flex flex-wrap gap-3">
+
+                <a id="modalDetailsLink"
+                   href="#"
+                   class="flex-1 text-center px-4 py-2.5 rounded-xl
+                    bg-primary text-white font-semibold
+                    hover:bg-primary/90 transition-colors">
+                    Détails
+                </a>
+
+                <a id="modalModifierLink"
+                   href="#"
+                   class="flex-1 text-center px-4 py-2.5 rounded-xl
+                    border border-gray-300 font-semibold
+                    text-on-surface-variant
+                    hover:bg-surface-container-highest transition-colors">
+                    Modifier
+                </a>
+
+                <form id="modalSupprimerForm"
+                      method="post"
+                      action="#"
+                      class="flex-1">
+
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="modalSupprimerId" name="id" value="" />
+
+                    <button type="submit"
+                            class="w-full px-4 py-2.5 rounded-xl
+                        bg-red-600 text-white font-semibold
+                        hover:bg-red-700 transition-colors">
+                        Supprimer
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ============================= -->
+<!-- MODALE CONFIRMATION SUPPRESSION -->
+<!-- ============================= -->
+<div id="modalConfirmation"
+     class="hidden fixed inset-0 z-[60]
+    flex items-center justify-center
+    bg-black/50 p-4">
+
+    <div class="bg-white rounded-2xl shadow-2xl
+        w-full max-w-md
+        p-8 text-center">
+
+        <div class="w-16 h-16 mx-auto mb-6
+            rounded-full bg-red-100
+            flex items-center justify-center">
+            <span class="material-symbols-outlined text-red-600 text-3xl">
+                delete
+            </span>
+        </div>
+
+        <h3 class="font-headline text-xl text-tertiary mb-2">
+            Confirmer la suppression
+        </h3>
+
+        <p id="modalConfirmationTexte"
+           class="text-on-surface-variant text-sm mb-8">
+            Voulez-vous vraiment supprimer ce parfum ? Cette action est irréversible.
+        </p>
+
+        <div class="flex gap-3">
+
+            <button type="button"
+                    id="btnAnnulerConfirmation"
+                    class="flex-1 px-4 py-3 rounded-xl
+                border border-gray-300 font-semibold
+                text-on-surface-variant
+                hover:bg-surface-container-highest transition-colors">
+                Annuler
+            </button>
+
+            <button type="button"
+                    id="btnConfirmerConfirmation"
+                    class="flex-1 px-4 py-3 rounded-xl
+                bg-red-600 text-white font-semibold
+                hover:bg-red-700 transition-colors">
+                Supprimer
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        function ouvrirModalActions(btn) {
+            const d = btn.dataset;
+
+            document.getElementById('modalNom').textContent = d.nom;
+            document.getElementById('modalMarque').textContent = d.marque;
+            document.getElementById('modalDescription').textContent = d.description;
+            document.getElementById('modalPrix').textContent = d.prix + ' $';
+            document.getElementById('modalVolume').textContent = d.volume + ' ml';
+            document.getElementById('modalCategorie').textContent = d.categorie;
+            document.getElementById('modalGenre').textContent = d.genre;
+
+            const stockBadge = document.getElementById('modalStockBadge');
+            const stock = parseInt(d.stock, 10);
+            if (stock > 0) {
+                stockBadge.textContent = 'En stock';
+                stockBadge.className = 'bg-surface-container-highest px-2 py-0.5 rounded-full text-[9px] uppercase font-label text-on-surface-variant';
+            } else {
+                stockBadge.textContent = 'Rupture';
+                stockBadge.className = 'bg-red-100 px-2 py-0.5 rounded-full text-[9px] uppercase font-label text-red-600';
+            }
+
+            document.getElementById('modalImagePrincipale').src = d.imagePrincipale;
+            document.getElementById('modalImagePrincipale').alt = d.nom;
+
+            const miniatures = document.getElementById('modalMiniatures');
+            miniatures.innerHTML = '';
+            let autresImages = [];
+            try {
+                autresImages = JSON.parse(d.images || '[]');
+            } catch (e) {
+                console.error('Erreur de parsing des images :', e);
+            }
+            autresImages.forEach(url => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = d.nom;
+                img.className = 'w-16 h-16 object-cover rounded-lg border border-gray-200 cursor-pointer hover:opacity-80';
+                img.addEventListener('click', () => {
+                    document.getElementById('modalImagePrincipale').src = url;
+                });
+                miniatures.appendChild(img);
+            });
+
+            document.getElementById('modalDetailsLink').href = d.detailsUrl;
+            document.getElementById('modalModifierLink').href = d.editUrl;
+            document.getElementById('modalSupprimerForm').action = d.deleteUrl;
+            document.getElementById('modalSupprimerId').value = d.id;
+
+            document.getElementById('modalActions').classList.remove('hidden');
+        }
+
+        function fermerModalActions() {
+            document.getElementById('modalActions').classList.add('hidden');
+        }
+
+        // Rattacher le clic à tous les boutons "Actions"
+        document.querySelectorAll('.btn-actions').forEach(btn => {
+            btn.addEventListener('click', () => ouvrirModalActions(btn));
+        });
+
+        // Bouton fermer
+        document.getElementById('btnFermerModal').addEventListener('click', fermerModalActions);
+
+        // Confirmation avant suppression
+        // Gestion de la confirmation de suppression via modale personnalisée
+        let formASoumettreApresConfirmation = null;
+
+        document.getElementById('btnDemanderSuppression').addEventListener('click', function() {
+            formASoumettreApresConfirmation = document.getElementById('modalSupprimerForm');
+            document.getElementById('modalConfirmationTexte').textContent =
+                'Voulez-vous vraiment supprimer ce parfum ? Cette action est irréversible.';
+            document.getElementById('modalConfirmation').classList.remove('hidden');
+        });
+
+        document.getElementById('btnConfirmerConfirmation').addEventListener('click', function() {
+            if (formASoumettreApresConfirmation) {
+                formASoumettreApresConfirmation.submit();
+            }
+        });
+
+        document.getElementById('btnAnnulerConfirmation').addEventListener('click', function() {
+            formASoumettreApresConfirmation = null;
+            document.getElementById('modalConfirmation').classList.add('hidden');
+        });
+
+        // Fermer en cliquant sur le fond noir
+        document.getElementById('modalConfirmation').addEventListener('click', function(e) {
+            if (e.target === this) {
+                formASoumettreApresConfirmation = null;
+                this.classList.add('hidden');
+            }
+        });
+
+        // Fermer en cliquant sur le fond noir
+        document.getElementById('modalActions').addEventListener('click', function(e) {
+            if (e.target === this) {
+                fermerModalActions();
+            }
+        });
+
+        // Fermer avec la touche Échap
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                fermerModalActions();
+            }
+        });
+    </script>
+}

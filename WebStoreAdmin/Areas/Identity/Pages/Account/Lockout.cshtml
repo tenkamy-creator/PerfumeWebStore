@@ -1,0 +1,15 @@
+﻿@page
+@model LockoutModel
+@{
+    ViewData["Title"] = "Compte verrouillé";
+}
+
+<main class="min-h-[70vh] flex items-center justify-center px-6 pt-32 pb-20 bg-background">
+    <div class="w-full max-w-md bg-surface-container-low rounded-xl shadow-xl p-10 border border-outline-variant/20 text-center">
+        <span class="material-symbols-outlined text-6xl text-red-600 mb-4">lock_clock</span>
+        <h1 class="font-headline text-3xl text-tertiary mb-4">@ViewData["Title"]</h1>
+        <p class="text-red-600">
+            Ce compte a été temporairement verrouillé. Veuillez réessayer plus tard.
+        </p>
+    </div>
+</main>

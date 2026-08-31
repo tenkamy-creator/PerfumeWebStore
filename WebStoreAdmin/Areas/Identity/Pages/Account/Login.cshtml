@@ -1,0 +1,110 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Connexion";
+}
+
+<main class="min-h-screen flex items-center justify-center px-6 pt-32 pb-20 bg-background">
+
+    <div class="w-full max-w-md bg-surface-container-low rounded-xl shadow-xl p-10 border border-outline-variant/20">
+
+        <div class="text-center mb-10">
+            <h1 class="font-headline text-4xl text-tertiary mb-3">
+                Connexion
+            </h1>
+
+            <p class="text-on-surface-variant text-sm">
+                Accédez à votre espace personnel
+            </p>
+        </div>
+
+        <form id="account" method="post" class="space-y-6">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-red-500 text-sm">
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label asp-for="Input.Email"
+                       class="block mb-2 text-sm uppercase tracking-widest text-outline">
+                    Email
+                </label>
+
+                <input asp-for="Input.Email"
+                       class="w-full rounded-lg border border-outline-variant bg-surface px-4 py-3 focus:border-primary focus:ring-primary"
+                       autocomplete="username"
+                       placeholder="name@example.com" />
+
+                <span asp-validation-for="Input.Email"
+                      class="text-red-500 text-sm">
+                </span>
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label asp-for="Input.Password"
+                       class="block mb-2 text-sm uppercase tracking-widest text-outline">
+                    Password
+                </label>
+
+                <input asp-for="Input.Password"
+                       type="password"
+                       class="w-full rounded-lg border border-outline-variant bg-surface px-4 py-3 focus:border-primary focus:ring-primary"
+                       autocomplete="current-password"
+                       placeholder="Password" />
+
+                <span asp-validation-for="Input.Password"
+                      class="text-red-500 text-sm">
+                </span>
+            </div>
+
+            <!-- Remember me -->
+            <div class="flex items-center gap-3">
+                <input asp-for="Input.RememberMe"
+                       class="rounded border-outline-variant text-primary focus:ring-primary" />
+
+                <label asp-for="Input.RememberMe"
+                       class="text-sm text-on-surface-variant">
+                    Remember me
+                </label>
+            </div>
+
+            <!-- Submit -->
+            <button id="login-submit"
+                    type="submit"
+                    class="w-full bg-primary hover:bg-primary-container text-white py-4 rounded-lg uppercase tracking-[0.2em] text-sm transition-all duration-300">
+                Log in
+            </button>
+
+            <!-- Links -->
+            <div class="space-y-3 text-center text-sm">
+
+                <a id="forgot-password"
+                   asp-page="./ForgotPassword"
+                   class="block text-primary hover:underline">
+                    Forgot your password?
+                </a>
+
+                <a asp-page="./Register"
+                   asp-route-returnUrl="@Model.ReturnUrl"
+                   class="block text-primary hover:underline">
+                    Create an account
+                </a>
+
+                <a id="resend-confirmation"
+                   asp-page="./ResendEmailConfirmation"
+                   class="block text-primary hover:underline">
+                    Resend email confirmation
+                </a>
+
+            </div>
+
+        </form>
+    </div>
+</main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

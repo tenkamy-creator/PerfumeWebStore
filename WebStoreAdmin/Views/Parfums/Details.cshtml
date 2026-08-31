@@ -1,0 +1,231 @@
+﻿@model WebStoreAdmin.ViewModels.Parfums.ParfumDetailsVM
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<main class="pt-32 pb-24">
+    <!-- Product Detail Section -->
+    <section class="max-w-screen-2xl mx-auto px-12 grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+
+        <!-- Left: Hero Image Area -->
+        <div class="lg:col-span-7 sticky top-32">
+
+            <div class="relative aspect-[4/5] max-w-md mx-auto bg-surface-container overflow-hidden rounded-lg group p-8">
+                <img id="imagePrincipaleDetails"
+                     alt="@Model.Nom"
+                     class="w-full h-full object-contain transition-transform duration-[1.5s] group-hover:scale-105"
+                     src="@(Model.ImagePrincipale?.Url ?? "https://placehold.co/600x750")" />
+                <div class="absolute inset-0 bg-black/5 pointer-events-none"></div>
+            </div>
+
+            <!-- Miniatures -->
+            @if (Model.Images.Count > 1)
+            {
+                <div class="flex gap-3 mt-4 justify-center max-w-md mx-auto">
+                    @foreach (var image in Model.Images.OrderBy(i => i.OrdreAffichage))
+                    {
+                        <img src="@image.Url"
+                             alt="@Model.Nom"
+                             class="miniature-details w-20 h-20 object-cover rounded-lg border-2
+                        @(image.ImagePrincipale ? "border-primary" : "border-transparent")
+                        cursor-pointer hover:border-primary/50 transition-colors"
+                             data-url="@image.Url" />
+                    }
+                </div>
+            }
+
+        </div>
+
+        <!-- Right: Product Information -->
+        <div class="lg:col-span-5 space-y-10">
+            <header class="space-y-4">
+                <p class="font-label text-xs uppercase tracking-[0.2em] text-secondary">
+                    @Model.Categorie.Nom
+                </p>
+                <h1 class="font-headline text-5xl font-bold tracking-tight text-tertiary">
+                    @Model.Nom
+                </h1>
+                <div class="flex items-baseline space-x-4">
+                    <span class="text-2xl font-light text-tertiary">
+                        @Model.Prix.ToString("0.00") $
+                    </span>
+                </div>
+                <div>
+                    <h3 class="text-sm uppercase tracking-widest text-gray-500">
+                        Volume
+                    </h3>
+                    <p class="text-lg">
+                        @Model.Volume ml
+                    </p>
+                </div>
+                @if (Model.Stock > 0)
+                {
+                    <span class="text-green-600 uppercase text-sm">
+                        En stock
+                    </span>
+                }
+                else
+                {
+                    <span class="text-red-600 uppercase text-sm">
+                        Rupture de stock
+                    </span>
+                }
+            </header>
+
+            <div class="space-y-6">
+                <p class="text-on-surface-variant leading-[1.8] font-body text-lg">
+                    @Model.Description
+                </p>
+            </div>
+
+            <!-- Interactive Olfactory Pyramid -->
+            @if (Model.NotesTete.Any() || Model.NotesCoeur.Any() || Model.NotesFond.Any())
+            {
+                <div class="pyramid-gradient p-8 rounded-lg space-y-8">
+                    <h3 class="font-headline text-lg italic text-tertiary border-b border-outline-variant/30 pb-4">Olfactory Pyramid</h3>
+                    <div class="space-y-8">
+
+                        @if (Model.NotesTete.Any())
+                        {
+                            <div class="flex items-start gap-6">
+                                <div class="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-full border border-secondary/30 text-secondary">
+                                    <span class="material-symbols-outlined" data-icon="light_mode">light_mode</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-label text-[10px] uppercase tracking-widest mb-2 text-outline">Notes de tête</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        @foreach (var note in Model.NotesTete)
+                                        {
+                                            <span class="bg-secondary-container text-on-secondary-container px-4 py-1 rounded-full text-xs font-medium">@note.Nom</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        @if (Model.NotesCoeur.Any())
+                        {
+                            <div class="flex items-start gap-6">
+                                <div class="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-full border border-primary/30 text-primary">
+                                    <span class="material-symbols-outlined" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-label text-[10px] uppercase tracking-widest mb-2 text-outline">Notes de cœur</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        @foreach (var note in Model.NotesCoeur)
+                                        {
+                                            <span class="bg-secondary-container text-on-secondary-container px-4 py-1 rounded-full text-xs font-medium">@note.Nom</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        @if (Model.NotesFond.Any())
+                        {
+                            <div class="flex items-start gap-6">
+                                <div class="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-full border border-tertiary/30 text-tertiary">
+                                    <span class="material-symbols-outlined" data-icon="nature">nature</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-label text-[10px] uppercase tracking-widest mb-2 text-outline">Notes de fond</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        @foreach (var note in Model.NotesFond)
+                                        {
+                                            <span class="bg-secondary-container text-on-secondary-container px-4 py-1 rounded-full text-xs font-medium">@note.Nom</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            }
+
+            <!-- CTA -->
+            <div class="pt-6">
+                <div class="flex gap-5">
+
+                    @if (User.IsInRole(Roles.Administrateur))
+                    {
+                        <a asp-action="Edit"
+                           asp-route-id="@Model.Id"
+                           class="flex-1 text-center bg-gradient-to-br from-primary to-primary-container text-on-primary py-6 px-10 rounded-lg font-label uppercase tracking-[0.2em] text-sm shadow-xl shadow-primary/10 hover:shadow-primary/20 transition-all duration-500 hover:-translate-y-1 active:translate-y-0">
+                            Modifier
+                        </a>
+                    }
+
+                    <button type="button"
+                            class="flex-1 bg-gradient-to-br from-primary to-primary-container text-on-primary py-6 px-10 rounded-lg font-label uppercase tracking-[0.2em] text-sm shadow-xl shadow-primary/10 hover:shadow-primary/20 transition-all duration-500 hover:-translate-y-1 active:translate-y-0">
+                        Add to Bag
+                    </button>
+
+                </div>
+                <p class="text-center mt-4 text-xs font-label uppercase tracking-widest text-outline/60">Complimentary Shipping on all orders</p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Recommended Section -->
+    @if (Model.Recommandations.Any())
+    {
+        <section class="mt-40 bg-surface-container-low py-24">
+            <div class="max-w-screen-2xl mx-auto px-12">
+
+                <div class="flex justify-between items-end mb-16">
+                    <div class="space-y-2">
+                        <p class="font-label text-xs uppercase tracking-widest text-secondary">A Curated Selection</p>
+                        <h2 class="font-headline text-4xl text-tertiary">Recommended for You</h2>
+                    </div>
+                    <a asp-action="Index"
+                       asp-route-categories="@Model.Categorie.Id"
+                       class="font-label text-xs uppercase tracking-widest text-primary border-b border-primary/20 pb-1 hover:border-primary transition-all">
+                        Explore All
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    @foreach (var reco in Model.Recommandations)
+                    {
+                        <a asp-action="Details"
+                           asp-route-id="@reco.Id"
+                           class="group cursor-pointer block">
+
+                            <div class="aspect-[3/4] bg-surface overflow-hidden mb-6 rounded-sm">
+                                <img alt="@reco.Nom"
+                                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                     src="@(reco.ImagePrincipale?.Url ?? "https://placehold.co/300x400")" />
+                            </div>
+
+                            <h3 class="font-headline text-lg text-tertiary mb-1">@reco.Nom</h3>
+                            <p class="text-outline text-sm uppercase tracking-tighter mb-2">@reco.Categorie.Nom</p>
+                            <p class="font-medium text-primary">@reco.Prix.ToString("0.00") $</p>
+
+                        </a>
+                    }
+                </div>
+
+            </div>
+        </section>
+    }
+</main>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.miniature-details').forEach(img => {
+            img.addEventListener('click', () => {
+                document.getElementById('imagePrincipaleDetails').src = img.dataset.url;
+
+                document.querySelectorAll('.miniature-details').forEach(m => {
+                    m.classList.remove('border-primary');
+                    m.classList.add('border-transparent');
+                });
+                img.classList.remove('border-transparent');
+                img.classList.add('border-primary');
+            });
+        });
+    </script>
+}

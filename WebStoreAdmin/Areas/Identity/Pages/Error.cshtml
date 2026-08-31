@@ -1,0 +1,58 @@
+﻿@page
+@model ErrorModel
+@{
+    ViewData["Title"] = "Erreur";
+}
+
+<main class="min-h-[80vh] flex items-center justify-center px-6">
+    <div class="max-w-2xl w-full text-center">
+
+        <!-- Code erreur -->
+        <div class="mb-8">
+            <h1 class="font-headline text-8xl md:text-9xl text-primary">500</h1>
+            <div class="w-24 h-px bg-primary mx-auto mt-6"></div>
+        </div>
+
+        <!-- Message -->
+        <div class="bg-surface-container-low rounded-2xl p-10 shadow-sm border border-outline-variant/20 text-left">
+
+            <div class="text-center mb-6">
+                <span class="material-symbols-outlined text-6xl text-red-600 mb-4">error</span>
+                <h2 class="font-headline text-3xl text-tertiary">Une erreur est survenue</h2>
+                <p class="text-on-surface-variant mt-2">Le traitement de votre requête a échoué.</p>
+            </div>
+
+            @if (Model.ShowRequestId)
+            {
+                <p class="text-sm text-on-surface-variant text-center mb-6">
+                    <strong>ID de requête :</strong>
+                    <code class="px-2 py-1 rounded bg-surface-container text-tertiary font-mono">@Model.RequestId</code>
+                </p>
+            }
+
+            <div class="w-full h-px bg-outline-variant/30 my-6"></div>
+
+            <h3 class="font-headline text-lg text-tertiary mb-2">Mode développement</h3>
+            <p class="text-sm text-on-surface-variant mb-3">
+                Passer à l'environnement <strong>Development</strong> affichera des informations plus détaillées sur l'erreur survenue.
+            </p>
+            <p class="text-sm text-on-surface-variant">
+                <strong>L'environnement Development ne doit pas être activé dans les applications déployées</strong>,
+                car cela peut exposer des informations sensibles issues des exceptions aux utilisateurs finaux.
+                Pour du débogage local, activez-le en définissant la variable d'environnement
+                <strong>ASPNETCORE_ENVIRONMENT</strong> à <strong>Development</strong>, puis redémarrez l'application.
+            </p>
+        </div>
+
+        <!-- Actions -->
+        <div class="mt-10">
+            <a asp-area="" asp-controller="Home" asp-action="Index"
+               class="px-8 py-4 bg-primary text-white rounded-lg
+                hover:opacity-90 transition-all shadow-lg
+                uppercase tracking-wider text-sm">
+                Retour à l'accueil
+            </a>
+        </div>
+
+    </div>
+</main>

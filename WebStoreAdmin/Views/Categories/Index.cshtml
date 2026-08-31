@@ -1,0 +1,117 @@
+﻿@model IEnumerable<WebStoreAdmin.ViewModels.Categories.CategorieIndexVM>
+
+@{
+    ViewData["Title"] = "Catégories";
+}
+
+<div class="max-w-7xl mx-auto px-8 py-12 pt-32 pb-20">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-10">
+
+        <div>
+            <h1 class="text-4xl font-headline text-tertiary">
+                Catégories
+            </h1>
+
+            <p class="text-on-surface-variant mt-2">
+                Gérez les catégories de parfums de votre boutique.
+            </p>
+        </div>
+
+        <a asp-action="Create"
+           class="px-6 py-3 bg-primary text-white rounded-lg
+                  hover:opacity-90 transition-all shadow-lg">
+
+            +  Nouvelle catégorie
+
+        </a>
+
+    </div>
+
+    <!-- Table -->
+    <div class="bg-surface-container-low rounded-xl overflow-hidden shadow-sm border border-outline-variant/20">
+
+        <table class="w-full">
+
+            <thead class="bg-surface-container-high">
+
+                <tr>
+                    <th class="text-left px-6 py-4 uppercase tracking-wider text-xs text-on-surface-variant">
+                        Nom
+                    </th>
+
+                    <th class="text-right px-6 py-4 uppercase tracking-wider text-xs text-on-surface-variant">
+                        Actions
+                    </th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr class="border-t border-outline-variant/20 hover:bg-surface-container transition-colors">
+
+                        <td class="px-6 py-5 font-medium text-tertiary">
+                            @item.Nom
+                        </td>
+
+                        <td class="px-6 py-5">
+
+                            <div class="flex justify-end gap-3">
+
+                                <a asp-action="Edit"
+                                   asp-route-id="@item.Id"
+                                   class="px-4 py-2 rounded-lg
+                                              bg-secondary-container
+                                              text-on-secondary-container
+                                              hover:opacity-80 transition">
+
+                                    Modifier
+
+                                </a>
+
+                                <a asp-action="Details"
+                                   asp-route-id="@item.Id"
+                                   class="px-4 py-2 rounded-lg
+                                              bg-surface-container-high
+                                              hover:bg-surface-container-highest
+                                              transition">
+
+                                    Détails
+
+                                </a>
+
+                                <a asp-action="Delete"
+                                   asp-route-id="@item.Id"
+                                   class="px-4 py-2 rounded-lg
+                                              bg-red-500 text-white
+                                              hover:bg-red-600 transition">
+
+                                    Supprimer
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="flex items-center justify-between pt-4 border-t border-outline-variant/20">
+        <a asp-controller="Home" asp-action="Index"
+           class="font-label text-xs uppercase tracking-widest text-outline hover:text-tertiary transition-colors">
+            &larr; Retour à l'accueil
+        </a>
+    </div>
+
+</div>

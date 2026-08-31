@@ -1,0 +1,108 @@
+﻿@model WebStoreAdmin.ViewModels.Employes.EmployesSupprimerVM
+
+@{
+    ViewData["Title"] = "Supprimer un employé";
+}
+
+<div class="max-w-4xl mx-auto px-8 py-12 pt-32 pb-20">
+
+    <div class="bg-surface-container-low rounded-xl shadow-sm border border-outline-variant/20 overflow-hidden">
+
+        <!-- Header -->
+        <div class="p-8 border-b border-outline-variant/20">
+
+            <h1 class="text-3xl font-headline text-red-600">
+                Supprimer un employé
+            </h1>
+
+            <p class="mt-3 text-on-surface-variant">
+                Cette action est irréversible. Veuillez confirmer la suppression de cet employé.
+            </p>
+
+        </div>
+
+        <!-- Informations -->
+        <div class="p-8">
+
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
+
+                <p class="text-red-700 font-medium">
+                    Êtes-vous certain de vouloir supprimer cet employé ?
+                </p>
+
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+
+                <div>
+                    <h3 class="text-sm uppercase tracking-widest text-on-surface-variant mb-2">
+                        Nom complet
+                    </h3>
+
+                    <p class="text-lg font-medium">
+                        @Model.NomComplet
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-sm uppercase tracking-widest text-on-surface-variant mb-2">
+                        Courriel
+                    </h3>
+
+                    <p class="text-lg">
+                        @Model.Email
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-sm uppercase tracking-widest text-on-surface-variant mb-2">
+                        Poste
+                    </h3>
+
+                    <p class="text-lg font-medium text-primary">
+                        @Model.Poste
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-sm uppercase tracking-widest text-on-surface-variant mb-2">
+                        Département
+                    </h3>
+
+                    <p class="text-lg">
+                        @Model.Departement
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="px-8 py-6 bg-surface-container flex flex-col sm:flex-row justify-end gap-4">
+
+            <a asp-action="Index"
+               class="px-6 py-3 rounded-lg border border-outline-variant hover:bg-surface-container-high transition">
+
+                Annuler
+
+            </a>
+
+            <form asp-action="Supprimer" method="post">
+
+                <input type="hidden" asp-for="Id" />
+
+                <button type="submit"
+                        class="px-6 py-3 rounded-lg bg-red-600 text-white hover:bg-red-700 transition shadow-sm">
+
+                    Supprimer définitivement
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,92 @@
+﻿@model WebStoreAdmin.ViewModels.Categories.CategoriesAjouterVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<main class="pt-32 pb-24 bg-surface min-h-screen">
+    <div class="max-w-screen-2xl mx-auto px-12">
+
+        <!-- En-tête -->
+        <div class="max-w-2xl mx-auto mb-12">
+            <p class="font-label text-xs uppercase tracking-[0.3em] text-secondary mb-3">Catalogue</p>
+            <h1 class="font-headline text-4xl text-tertiary">Nouvelle Catégorie</h1>
+            <p class="text-on-surface-variant mt-3">
+                Les catégories permettent d'organiser les parfums de votre boutique.
+            </p>
+        </div>
+
+        <!-- Carte du formulaire -->
+        <div class="max-w-2xl mx-auto bg-surface-container-low rounded-lg border border-outline-variant/20 p-10 shadow-sm">
+            <form asp-action="Create" class="space-y-8">
+                <div asp-validation-summary="ModelOnly" class="text-red-600 text-sm"></div>
+
+                <div>
+                    <label asp-for="Nom" class="block font-label text-[10px] uppercase tracking-widest text-outline mb-2"></label>
+                    <input asp-for="Nom"
+                           placeholder="ex. Boisé, Floral, Oriental..."
+                           class="w-full rounded-lg border border-outline-variant/30 bg-surface px-4 py-3 text-tertiary placeholder:text-outline/50 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all" />
+                    <span asp-validation-for="Nom" class="block mt-2 text-sm text-red-600"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Description" class="block font-label text-[10px] uppercase tracking-widest text-outline mb-2"></label>
+                    <textarea asp-for="Description"
+                              rows="3"
+                              placeholder="Décrivez brièvement cette famille olfactive..."
+                              class="w-full rounded-lg border border-outline-variant/30 bg-surface px-4 py-3 text-tertiary placeholder:text-outline/50 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all resize-none"></textarea>
+                    <span asp-validation-for="Description" class="block mt-2 text-sm text-red-600"></span>
+                </div>
+
+                <div>
+                    <label class="block font-label text-[10px] uppercase tracking-widest text-outline mb-3">
+                        Parfums à associer
+                    </label>
+
+                    @if (Model.Parfums != null && Model.Parfums.Any())
+                    {
+                        <div class="max-h-72 overflow-y-auto rounded-lg border border-outline-variant/30 bg-surface p-4 space-y-1">
+                            @foreach (var parfum in Model.Parfums)
+                            {
+                                <label class="flex items-center gap-3 py-2 px-2 rounded-md hover:bg-surface-container cursor-pointer transition-colors">
+                                    <input type="checkbox"
+                                           name="ParfumsIds"
+                                           value="@parfum.Value"
+                                           checked="@(parfum.Selected ? "checked" : null)"
+                                           class="h-4 w-4 rounded border-outline-variant/50 text-primary focus:ring-primary/40" />
+                                    <span class="text-sm text-tertiary">@parfum.Text</span>
+                                </label>
+                            }
+                        </div>
+                        <p class="text-xs text-outline mt-2">
+                            Sélectionnez un ou plusieurs parfums à rattacher à cette catégorie. Vous pourrez modifier cette liste plus tard.
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="text-sm text-outline italic">Aucun parfum disponible pour le moment.</p>
+                    }
+                </div>
+
+                <div class="flex items-center justify-between pt-4 border-t border-outline-variant/20">
+                    <a asp-action="Index"
+                       class="font-label text-xs uppercase tracking-widest text-outline hover:text-tertiary transition-colors">
+                        &larr; Retour à la liste
+                    </a>
+
+                    <button type="submit"
+                            class="bg-gradient-to-br from-primary to-primary-container text-on-primary py-4 px-10 rounded-lg font-label uppercase tracking-[0.2em] text-sm shadow-lg shadow-primary/10 hover:shadow-primary/20 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0">
+                        Créer la catégorie
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</main>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

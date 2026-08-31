@@ -1,0 +1,99 @@
+﻿@page
+@using Microsoft.AspNetCore.Http.Features
+@using WebStoreAdmin.Areas.Identity
+@using WebStoreAdmin.Areas.Identity.Pages
+@using WebStoreAdmin.Areas.Identity.Pages.Account
+@using WebStoreAdmin.Areas.Identity.Pages.Account.Manage
+@using WebStoreAdmin.Models
+@model TwoFactorAuthenticationModel
+@{
+    ViewData["Title"] = "Authentification à deux facteurs (2FA)";
+    ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
+}
+
+<partial name="_StatusMessage" for="StatusMessage" />
+<h2 class="font-headline text-2xl text-tertiary mb-6">@ViewData["Title"]</h2>
+
+@{
+    var consentFeature = HttpContext.Features.Get<ITrackingConsentFeature>();
+    @if (consentFeature?.CanTrack ?? true)
+    {
+        @if (Model.Is2faEnabled)
+        {
+            if (Model.RecoveryCodesLeft == 0)
+            {
+                <div class="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4 mb-6">
+                    <strong class="block mb-1">Vous n'avez plus aucun code de récupération.</strong>
+                    <p class="text-sm">Vous devez <a asp-page="./GenerateRecoveryCodes" class="underline">générer un nouvel ensemble de codes de récupération</a> avant de pouvoir vous connecter avec un code de récupération.</p>
+                </div>
+            }
+            else if (Model.RecoveryCodesLeft == 1)
+            {
+                <div class="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4 mb-6">
+                    <strong class="block mb-1">Il vous reste 1 code de récupération.</strong>
+                    <p class="text-sm">Vous pouvez <a asp-page="./GenerateRecoveryCodes" class="underline">générer un nouvel ensemble de codes de récupération</a>.</p>
+                </div>
+            }
+            else if (Model.RecoveryCodesLeft <= 3)
+            {
+                <div class="bg-amber-50 border border-amber-200 text-amber-700 rounded-lg p-4 mb-6">
+                    <strong class="block mb-1">Il vous reste @Model.RecoveryCodesLeft codes de récupération.</strong>
+                    <p class="text-sm">Vous devriez <a asp-page="./GenerateRecoveryCodes" class="underline">générer un nouvel ensemble de codes de récupération</a>.</p>
+                </div>
+            }
+
+            <div class="flex flex-wrap gap-3 mb-8">
+                @if (Model.IsMachineRemembered)
+                {
+                    <form method="post" class="inline-block">
+                        <button type="submit"
+                                class="px-6 py-3 rounded-lg border border-outline-variant hover:bg-surface-container-high transition-colors">
+                            Oublier ce navigateur
+                        </button>
+                    </form>
+                }
+                <a asp-page="./Disable2fa"
+                   class="px-6 py-3 rounded-lg border border-outline-variant hover:bg-surface-container-high transition-colors">
+                    Désactiver la 2FA
+                </a>
+                <a asp-page="./GenerateRecoveryCodes"
+                   class="px-6 py-3 rounded-lg border border-outline-variant hover:bg-surface-container-high transition-colors">
+                    Réinitialiser les codes de récupération
+                </a>
+            </div>
+        }
+
+        <h3 class="font-headline text-lg text-tertiary mb-4">Application d'authentification</h3>
+        <div class="flex flex-wrap gap-3">
+            @if (!Model.HasAuthenticator)
+            {
+                <a id="enable-authenticator" asp-page="./EnableAuthenticator"
+                   class="bg-gradient-to-br from-primary to-primary-container text-on-primary py-3 px-8 rounded-lg font-label uppercase tracking-[0.2em] text-sm shadow-lg shadow-primary/10 hover:shadow-primary/20 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0">
+                    Ajouter une application d'authentification
+                </a>
+            }
+            else
+            {
+                <a id="enable-authenticator" asp-page="./EnableAuthenticator"
+                   class="bg-gradient-to-br from-primary to-primary-container text-on-primary py-3 px-8 rounded-lg font-label uppercase tracking-[0.2em] text-sm shadow-lg shadow-primary/10 hover:shadow-primary/20 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0">
+                    Configurer l'application d'authentification
+                </a>
+                <a id="reset-authenticator" asp-page="./ResetAuthenticator"
+                   class="px-6 py-3 rounded-lg border border-outline-variant hover:bg-surface-container-high transition-colors">
+                    Réinitialiser l'application d'authentification
+                </a>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4">
+            <strong class="block mb-1">La politique de confidentialité et de cookies n'a pas été acceptée.</strong>
+            <p class="text-sm">Vous devez accepter la politique avant de pouvoir activer l'authentification à deux facteurs.</p>
+        </div>
+    }
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

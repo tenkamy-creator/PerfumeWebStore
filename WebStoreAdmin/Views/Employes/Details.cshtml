@@ -1,0 +1,130 @@
+﻿@model WebStoreAdmin.ViewModels.Employes.EmployesDetailsVM
+
+@{
+    ViewData["Title"] = "Détails de l'employé";
+}
+
+<div class="max-w-5xl mx-auto px-8 py-12 pt-32 pb-20">
+
+    <div class="bg-surface-container-low rounded-xl shadow-sm border border-outline-variant/20 overflow-hidden">
+
+        <!-- Header -->
+        <div class="p-8 border-b border-outline-variant/20 flex items-center gap-6">
+
+            @if (!string.IsNullOrEmpty(Model.PhotoUrl))
+            {
+                <img src="@Model.PhotoUrl"
+                     alt="Photo de @Model.Prenom @Model.Nom"
+                     class="w-20 h-20 rounded-full object-cover border border-outline-variant/30" />
+            }
+            else
+            {
+                <div class="w-20 h-20 rounded-full bg-surface-container flex items-center justify-center text-2xl font-headline text-tertiary">
+                    @Model.Prenom.Substring(0, 1)@Model.Nom.Substring(0, 1)
+                </div>
+            }
+
+            <div>
+                <h1 class="text-3xl font-headline text-tertiary">
+                    Détails de l'employé
+                </h1>
+
+                <p class="mt-2 text-on-surface-variant">
+                    Consultez les informations complètes de cet employé.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Informations -->
+        <div class="p-8">
+
+            <div class="grid md:grid-cols-2 gap-8">
+
+                <div>
+                    <h3 class="text-sm uppercase tracking-widest text-on-surface-variant mb-2">
+                        Prénom
+                    </h3>
+
+                    <p class="text-lg font-medium">
+                        @Model.Prenom
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-sm uppercase tracking-widest text-on-surface-variant mb-2">
+                        Nom
+                    </h3>
+
+                    <p class="text-lg font-medium">
+                        @Model.Nom
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-sm uppercase tracking-widest text-on-surface-variant mb-2">
+                        Courriel
+                    </h3>
+
+                    <p class="text-lg">
+                        @Model.Email
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-sm uppercase tracking-widest text-on-surface-variant mb-2">
+                        Poste
+                    </h3>
+
+                    <p class="text-lg font-medium text-primary">
+                        @Model.Poste
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-sm uppercase tracking-widest text-on-surface-variant mb-2">
+                        Département
+                    </h3>
+
+                    <p class="text-lg">
+                        @Model.Departement
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-sm uppercase tracking-widest text-on-surface-variant mb-2">
+                        Date d'embauche
+                    </h3>
+
+                    <p class="text-lg">
+                        @Model.DateEmbauche.ToString("dd/MM/yyyy")
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="px-8 py-6 bg-surface-container flex flex-col sm:flex-row justify-end gap-4">
+
+            <a asp-action="Index"
+               class="px-6 py-3 rounded-lg border border-outline-variant hover:bg-surface-container-high transition">
+
+                Retour à la liste
+
+            </a>
+
+            <a asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="px-6 py-3 rounded-lg bg-primary text-white hover:opacity-90 transition">
+
+                Modifier
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

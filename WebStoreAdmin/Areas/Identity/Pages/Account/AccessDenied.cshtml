@@ -1,0 +1,76 @@
+﻿@page
+@model AccessDeniedModel
+@{
+    ViewData["Title"] = "Accès refusé";
+}
+
+<main class="min-h-[80vh] flex items-center justify-center px-6">
+
+    <div class="max-w-2xl w-full text-center">
+
+        <!-- Code erreur -->
+        <div class="mb-8">
+
+            <h1 class="font-headline text-8xl md:text-9xl text-primary">
+                403
+            </h1>
+
+            <div class="w-24 h-px bg-primary mx-auto mt-6"></div>
+
+        </div>
+
+        <!-- Message -->
+        <div class="bg-surface-container-low rounded-2xl p-10 shadow-sm border border-outline-variant/20">
+
+            <span class="material-symbols-outlined text-6xl text-primary mb-6">
+                lock
+            </span>
+
+            <h2 class="font-headline text-4xl text-tertiary mb-4">
+                Accès refusé
+            </h2>
+
+            <p class="text-on-surface-variant leading-relaxed mb-6">
+                Vous êtes connecté, mais vous ne disposez pas des autorisations
+                nécessaires pour consulter cette page.
+            </p>
+
+            <div class="w-full h-px bg-outline-variant/30 my-8"></div>
+
+            <p class="text-sm text-on-surface-variant italic">
+                Si vous pensez qu'il s'agit d'une erreur, veuillez contacter
+                un administrateur système.
+            </p>
+
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row justify-center gap-4 mt-10">
+
+            <a asp-area=""
+               asp-controller="Home"
+               asp-action="Index"
+               class="px-8 py-4 bg-primary text-white rounded-lg
+                      hover:opacity-90 transition-all shadow-lg
+                      uppercase tracking-wider text-sm">
+
+                Retour à l'accueil
+
+            </a>
+
+            <a asp-area="Identity"
+               asp-page="/Account/Login"
+               class="px-8 py-4 bg-surface-container-high
+                      text-on-surface rounded-lg
+                      hover:bg-surface-container-highest
+                      transition-all uppercase tracking-wider text-sm">
+
+                Changer de compte
+
+            </a>
+
+        </div>
+
+    </div>
+
+</main>
